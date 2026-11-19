@@ -1,0 +1,233 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7866E8">
+
+    <title>Mi mundo de juegos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="app">
+
+        <!-- ENCABEZADO -->
+        <header class="top-header">
+
+            <div class="brand">
+                <div class="brand-icon">🎮</div>
+
+                <div>
+                    <h2>Mi mundo de juegos</h2>
+                    <p>Aprendemos jugando</p>
+                </div>
+            </div>
+
+            <div class="header-stars">
+                ⭐ ✨ 🌟
+            </div>
+
+        </header>
+
+
+        <!-- BIENVENIDA -->
+        <section class="welcome-card">
+
+            <div class="welcome-text">
+
+                <span class="welcome-label">
+                    🌈 ¡Hola, pequeño explorador!
+                </span>
+
+                <h1>
+                    ¡Bienvenido a
+                    <span>nuestro mundo!</span>
+                </h1>
+
+                <p>
+                    Aquí encontrarás aventuras increíbles.
+                    Elige uno de nuestros juegos y demuestra
+                    todo lo que puedes aprender.
+                </p>
+
+                <a href="#games" class="primary-button">
+                    ¡Vamos a jugar! 🚀
+                </a>
+
+            </div>
+
+            <div class="welcome-character">
+                <div class="character-circle">
+                    <span>🧸</span>
+                </div>
+
+                <span class="floating-item item-one">⭐</span>
+                <span class="floating-item item-two">🎈</span>
+                <span class="floating-item item-three">✨</span>
+            </div>
+
+        </section>
+
+
+        <!-- SELECCIÓN DE JUEGOS -->
+        <section class="games-section" id="games">
+
+            <div class="section-header">
+
+                <span class="section-label">
+                    🎯 NUESTRAS AVENTURAS
+                </span>
+
+                <h2>¿Qué juego quieres explorar?</h2>
+
+                <p>Selecciona una aventura para comenzar.</p>
+
+            </div>
+
+
+            <div class="games-grid">
+
+                <!-- JUEGO 1 -->
+                <article class="game-card rimas-card">
+
+                    <div class="game-top">
+                        <span class="game-number">JUEGO 01</span>
+                        <span class="game-status">⭐ Aventura</span>
+                    </div>
+
+                    <div class="game-illustration">
+                        <span class="main-emoji">🎵</span>
+                        <span class="decoration-emoji">🎶</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <span class="game-category">
+                            LENGUAJE Y SONIDOS
+                        </span>
+
+                        <h3>Presentación interactiva de rimas</h3>
+
+                        <p>
+                            Descubre palabras que riman,
+                            escucha y juega con sus sonidos.
+                        </p>
+
+                        <a href="rimas.html" class="play-button">
+                            <span>¡Jugar ahora!</span>
+                            <span>➜</span>
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <!-- JUEGO 2 -->
+                <article class="game-card memoria-card">
+
+                    <div class="game-top">
+                        <span class="game-number">JUEGO 02</span>
+                        <span class="game-status">⭐ Aventura</span>
+                    </div>
+
+                    <div class="game-illustration">
+                        <span class="main-emoji">👂</span>
+                        <span class="decoration-emoji">🔔</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <span class="game-category">
+                            ATENCIÓN Y ESCUCHA
+                        </span>
+
+                        <h3>Memoria auditiva de sonidos</h3>
+
+                        <p>
+                            Escucha atentamente, reconoce
+                            los sonidos y ejercita tu memoria.
+                        </p>
+
+                        <a href="sonidos.html" class="play-button">
+                            <span>¡Jugar ahora!</span>
+                            <span>➜</span>
+                        </a>
+
+                    </div>
+
+                </article>
+
+
+                <!-- JUEGO 3 -->
+                <article class="game-card silabas-card">
+
+                    <div class="game-top">
+                        <span class="game-number">JUEGO 03</span>
+                        <span class="game-status">⭐ Aventura</span>
+                    </div>
+
+                    <div class="game-illustration">
+                        <span class="main-emoji">🧩</span>
+                        <span class="decoration-emoji">🔤</span>
+                    </div>
+
+                    <div class="game-info">
+
+                        <span class="game-category">
+                            PALABRAS Y SÍLABAS
+                        </span>
+
+                        <h3>Juego digital de segmentación silábica</h3>
+
+                        <p>
+                            Separa las palabras en sílabas
+                            y descubre cómo están formadas.
+                        </p>
+
+                        <a href="silabica.html" class="play-button">
+                            <span>¡Jugar ahora!</span>
+                            <span>➜</span>
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- MENSAJE FINAL -->
+        <section class="encouragement">
+
+            <div class="encouragement-icon">🏆</div>
+
+            <div>
+                <h2>¡Tú eres un gran explorador!</h2>
+                <p>
+                    Aprende, descubre y diviértete en cada aventura.
+                </p>
+            </div>
+
+            <div class="encouragement-star">🌟</div>
+
+        </section>
+
+
+        <!-- PIE -->
+        <footer class="footer">
+            <p>Hecho con ❤️ para aprender jugando</p>
+            <span>© <span id="currentYear"></span> Mi mundo de juegos</span>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
