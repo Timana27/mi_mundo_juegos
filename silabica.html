@@ -1,0 +1,1476 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10b981">
+  <title>Aventura de las Sílabas — Recurso Digital N.° 9</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fefce8 100%);
+      min-height: 100vh;
+      color: #334155;
+    }
+
+    .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .sound-pulse {
+      animation: soundPulse 1.5s infinite;
+    }
+
+    @keyframes soundPulse {
+      0%, 100% { transform: scale(1); opacity: .8; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .wave-bar {
+      animation: waveBar .7s ease-in-out infinite alternate;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: .1s; }
+    .wave-bar:nth-child(3) { animation-delay: .2s; }
+    .wave-bar:nth-child(4) { animation-delay: .3s; }
+    .wave-bar:nth-child(5) { animation-delay: .4s; }
+
+    @keyframes waveBar {
+      from { height: 8px; }
+      to { height: 30px; }
+    }
+
+    .pop-success {
+      animation: popSuccess .4s ease-out;
+    }
+
+    @keyframes popSuccess {
+      0% { transform: scale(.8); opacity: 0; }
+      70% { transform: scale(1.08); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .syllable-tile {
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+
+    .syllable-tile:not(:disabled):hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .12);
+    }
+
+    .syllable-tile:disabled {
+      opacity: .35;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .answer-slot {
+      min-width: 65px;
+      min-height: 58px;
+    }
+
+    .category-button.active {
+      background: #d1fae5;
+      border-color: #10b981;
+      color: #047857;
+    }
+
+    .modal-overlay {
+      background: rgba(15, 23, 42, .55);
+      backdrop-filter: blur(5px);
+    }
+
+    button:focus-visible {
+      outline: 3px solid #6366f1;
+      outline-offset: 3px;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #diplomaPrint, #diplomaPrint * {
+        visibility: visible;
+      }
+
+      #diplomaPrint {
+        display: flex !important;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        background: white;
+      }
+    }
+/* BOTÓN DE INICIO TRANSPARENTE */
+.home-button {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+  color: #7c3aed;
+  font-size: 26px;
+
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 15px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  z-index: 9999;
+
+  transition: all 0.2s ease;
+}
+
+.home-button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+  </style>
+</head>
+<!-- BOTÓN PARA REGRESAR AL MENÚ PRINCIPAL -->
+<a href="index.html" class="home-button" title="Volver al menú principal">
+  🏠
+</a>
+<body>
+
+<div id="app" class="min-h-screen flex flex-col justify-between max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 gap-4">
+
+  <!-- ENCABEZADO -->
+  <header class="bg-white/90 rounded-3xl shadow-md border-2 border-emerald-100 p-4 sm:p-5 flex flex-col lg:flex-row items-center justify-between gap-4">
+
+    <div class="flex items-center gap-3 w-full lg:w-auto">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-md shrink-0">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 5h16v11H8l-4 4V5Z" stroke-linejoin="round"/>
+          <path d="M8 9h2m2 0h2m2 0h2M8 13h2m2 0h2" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div>
+        <p class="text-xs sm:text-sm font-bold text-emerald-600 uppercase tracking-wide">
+          Recurso Digital N.° 9 · Conciencia Fonológica
+        </p>
+        <h1 class="font-display text-2xl sm:text-3xl font-bold text-slate-800">
+          Aventura de las Sílabas
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-500">
+          ¡Jugamos, escuchamos y separamos palabras!
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center gap-2 w-full lg:w-auto">
+      <div class="flex bg-slate-100 p-1 rounded-xl">
+        <button id="modeTeacherBtn" type="button" onclick="setMode('teacher')"
+          class="px-3 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white shadow text-emerald-700">
+          📢 Modo Parlante / Aula
+        </button>
+
+        <button id="modeStudentBtn" type="button" onclick="setMode('student')"
+          class="px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-500">
+          🕹️ Modo Interactivo
+        </button>
+      </div>
+
+      <button type="button" onclick="openGuide()"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow transition">
+        📋 Guía y Rúbrica
+      </button>
+    </div>
+  </header>
+
+  <!-- NAVEGACIÓN DE CATEGORÍAS -->
+  <nav class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3">
+    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">
+      Elige una aventura
+    </p>
+    <div id="categoryNav" class="flex flex-wrap gap-2"></div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="bg-white rounded-3xl shadow-lg border-2 border-emerald-200 p-4 sm:p-6 lg:p-8">
+
+    <!-- INFORMACIÓN DE LA ACTIVIDAD -->
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+      <span id="challengeBadge" class="bg-sky-100 text-sky-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold">
+        ⭐ Reto 1 de 10
+      </span>
+
+      <span id="categoryBadge" class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold">
+        Objetos y hogar
+      </span>
+    </div>
+
+    <div class="text-center max-w-2xl mx-auto">
+      <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
+        ¡Vamos a separar las palabras!
+      </h2>
+
+      <p class="text-slate-500 text-sm sm:text-base">
+        Observa la imagen, escucha la palabra y descubre sus sílabas.
+      </p>
+    </div>
+
+    <!-- IMAGEN Y AUDIO -->
+    <section class="mt-6 max-w-2xl mx-auto">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 p-5 sm:p-8 text-white text-center shadow-lg">
+
+        <div class="absolute top-3 left-4 text-3xl opacity-30">✨</div>
+        <div class="absolute bottom-3 right-5 text-4xl opacity-30">⭐</div>
+
+        <div id="pictureEmoji" class="text-8xl sm:text-9xl mb-3 drop-shadow-md sound-pulse">
+          ⚽
+        </div>
+
+        <h3 id="wordDisplay" class="font-display text-3xl sm:text-4xl font-bold tracking-wider">
+          PELOTA
+        </h3>
+
+        <p class="text-sm text-blue-100 mt-2">
+          Escucha con mucha atención
+        </p>
+
+        <div class="flex justify-center items-center gap-1 h-9 mt-3" id="soundWave" aria-hidden="true">
+          <span class="wave-bar w-1.5 bg-white rounded-full h-3"></span>
+          <span class="wave-bar w-1.5 bg-white rounded-full h-5"></span>
+          <span class="wave-bar w-1.5 bg-white rounded-full h-7"></span>
+          <span class="wave-bar w-1.5 bg-white rounded-full h-4"></span>
+          <span class="wave-bar w-1.5 bg-white rounded-full h-6"></span>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mt-4 relative z-10">
+          <button type="button" onclick="speakWord()"
+            class="bg-white text-blue-700 hover:bg-blue-50 px-5 py-3 rounded-2xl font-bold shadow-md transition">
+            🔊 Escuchar palabra
+          </button>
+
+          <button type="button" onclick="speakSyllables()"
+            class="bg-yellow-300 text-yellow-900 hover:bg-yellow-200 px-5 py-3 rounded-2xl font-bold shadow-md transition">
+            🗣️ Escuchar sílabas
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORIENTACIÓN DOCENTE -->
+    <section id="teacherPanel" class="mt-6 max-w-3xl mx-auto bg-amber-50 border-2 border-amber-200 rounded-2xl p-4">
+      <div class="flex items-start gap-3">
+        <div class="text-3xl">👩‍🏫</div>
+        <div class="flex-1">
+          <h3 class="font-display text-lg font-bold text-amber-800">
+            Pregunta para acompañar al niño
+          </h3>
+
+          <p id="guidedQuestion" class="text-sm sm:text-base text-amber-900 mt-1">
+            ¿Qué objeto observas? ¿Puedes decir su nombre lentamente?
+          </p>
+
+          <button type="button" onclick="revealTeacherAnswer()"
+            class="mt-3 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-sm">
+            👀 Mostrar respuesta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVIDAD DE SÍLABAS -->
+    <section class="mt-7 max-w-3xl mx-auto">
+
+      <div class="text-center mb-5">
+        <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-800">
+          🧩 Ordena las sílabas
+        </h3>
+        <p class="text-sm text-slate-500 mt-1">
+          Toca las piezas para formar la palabra.
+        </p>
+      </div>
+
+      <!-- RESPUESTA -->
+      <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-4 sm:p-5">
+        <p class="text-center text-xs font-bold text-slate-400 uppercase mb-3">
+          Tu respuesta
+        </p>
+
+        <div id="answerSlots" class="flex flex-wrap justify-center gap-2 min-h-16">
+        </div>
+      </div>
+
+      <!-- PIEZAS -->
+      <div class="mt-5">
+        <p class="text-center text-xs font-bold text-slate-400 uppercase mb-3">
+          Elige las sílabas
+        </p>
+
+        <div id="syllableOptions" class="flex flex-wrap justify-center gap-3">
+        </div>
+      </div>
+
+
+      <!-- MENSAJE -->
+      <div id="feedbackBox" class="hidden mt-5 rounded-2xl p-4 text-center font-bold text-sm sm:text-base" role="status" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="bg-white rounded-2xl shadow-md border-2 border-emerald-100 p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+
+    <button type="button" onclick="previousChallenge()"
+      class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm w-full sm:w-auto">
+      ← Anterior
+    </button>
+
+    <div class="text-center">
+      <p class="text-sm font-bold text-slate-700">
+        ⭐ Retos superados: <span id="solvedCount" class="text-emerald-600">0</span> / 10
+      </p>
+      <p class="text-xs text-slate-400">¡Cada palabra es un nuevo aprendizaje!</p>
+    </div>
+
+    <button type="button" onclick="nextChallenge()"
+      class="bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm w-full sm:w-auto shadow">
+      Siguiente →
+    </button>
+  </footer>
+
+</div>
+
+<!-- MODAL DE GUÍA -->
+<div id="guideModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center p-3 sm:p-6">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+
+    <div class="sticky top-0 bg-white border-b border-slate-100 p-5 flex justify-between items-center rounded-t-3xl z-10">
+      <div>
+        <p class="text-xs font-bold text-indigo-500 uppercase">Orientación pedagógica</p>
+        <h2 class="font-display text-2xl font-bold text-slate-800">Guía y Rúbrica</h2>
+      </div>
+
+      <button type="button" onclick="closeGuide()" aria-label="Cerrar guía"
+        class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-xl font-bold">
+        ×
+      </button>
+    </div>
+
+    <div class="p-5 sm:p-7 space-y-6">
+
+      <section class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+        <h3 class="font-display text-xl font-bold text-emerald-800 mb-2">
+          🎯 Objetivo pedagógico
+        </h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Desarrollar la conciencia silábica de los niños mediante la identificación,
+          pronunciación y segmentación de palabras sencillas, relacionando imágenes,
+          sonidos y sílabas de manera lúdica.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="font-display text-xl font-bold text-slate-800 mb-3">
+          👩‍🏫 ¿Cómo aplicar el recurso?
+        </h3>
+
+        <div class="space-y-3 text-sm text-slate-600">
+          <div class="flex gap-3">
+            <span class="text-xl">1️⃣</span>
+            <p>Presenta la imagen y pide al niño que mencione lo que observa.</p>
+          </div>
+
+          <div class="flex gap-3">
+            <span class="text-xl">2️⃣</span>
+            <p>Reproduce el audio para que escuche la palabra completa.</p>
+          </div>
+
+          <div class="flex gap-3">
+            <span class="text-xl">3️⃣</span>
+            <p>Pronuncia la palabra lentamente y acompaña cada sílaba con palmadas.</p>
+          </div>
+
+          <div class="flex gap-3">
+            <span class="text-xl">4️⃣</span>
+            <p>Invita al niño a ordenar las piezas y formar la palabra.</p>
+          </div>
+
+          <div class="flex gap-3">
+            <span class="text-xl">5️⃣</span>
+            <p>Refuerza sus logros con comentarios positivos y nuevas oportunidades de práctica.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-sky-50 border border-sky-200 rounded-2xl p-5">
+        <h3 class="font-display text-xl font-bold text-sky-800 mb-2">
+          💡 Preguntas para estimular el aprendizaje
+        </h3>
+        <ul class="list-disc pl-5 space-y-2 text-sm text-slate-700">
+          <li>¿Qué observas en la imagen?</li>
+          <li>¿Cómo se llama este objeto o animal?</li>
+          <li>¿Puedes decir la palabra lentamente?</li>
+          <li>¿Cuántas palmadas necesitamos para pronunciarla?</li>
+          <li>¿Qué sílaba escuchas primero?</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="font-display text-xl font-bold text-slate-800 mb-3">
+          📋 Criterios de evaluación
+        </h3>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="border border-slate-200 rounded-xl p-4">
+            <p class="font-bold text-emerald-700 text-sm">Identificación</p>
+            <p class="text-xs text-slate-500 mt-1">Reconoce la imagen y nombra la palabra.</p>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4">
+            <p class="font-bold text-emerald-700 text-sm">Discriminación auditiva</p>
+            <p class="text-xs text-slate-500 mt-1">Escucha y reconoce los sonidos de la palabra.</p>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4">
+            <p class="font-bold text-emerald-700 text-sm">Segmentación silábica</p>
+            <p class="text-xs text-slate-500 mt-1">Separa la palabra en sus sílabas.</p>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl p-4">
+            <p class="font-bold text-emerald-700 text-sm">Participación</p>
+            <p class="text-xs text-slate-500 mt-1">Participa y sigue las indicaciones de la actividad.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex justify-end pt-2">
+        <button
+          type="button"
+          onclick="closeGuideModal()"
+          class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition cursor-pointer"
+        >
+          Volver a la presentación
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIPLOMA -->
+<div id="diplomaPrint" class="hidden">
+  <div class="border-8 border-double border-emerald-400 rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto w-full">
+    <div class="text-6xl mb-4">🏆</div>
+    <p class="text-sm font-bold tracking-widest text-emerald-600 uppercase">Reconocimiento especial</p>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold text-slate-800 mt-3">¡Diploma de Explorador de Sílabas!</h1>
+    <p class="text-lg text-slate-600 mt-8">Se entrega este diploma a:</p>
+    <p class="font-display text-3xl font-bold text-emerald-700 border-b-2 border-emerald-300 py-4 mt-2">
+      ¡Pequeño explorador!
+    </p>
+    <p class="text-slate-600 mt-7 leading-relaxed">
+      Por completar los 10 retos y demostrar entusiasmo al escuchar,
+      reconocer y separar palabras en sílabas.
+    </p>
+    <div class="text-4xl mt-8">⭐ 🌟 ⭐</div>
+    <p class="text-sm text-slate-500 mt-8">¡Sigue aprendiendo y jugando!</p>
+  </div>
+</div>
+
+<script>
+
+
+/* ==========================================
+   DATOS DE LAS AVENTURAS
+========================================== */
+
+const categories = [
+  {
+    id: "objetos",
+    name: "Objetos y hogar",
+    emoji: "🏠",
+    challenges: [
+      { id: "pelota", word: "PELOTA", emoji: "⚽", syllables: ["PE", "LO", "TA"], question: "¿Qué objeto observas? ¿Puedes decir su nombre lentamente?" },
+      { id: "casa", word: "CASA", emoji: "🏠", syllables: ["CA", "SA"], question: "¿Dónde vivimos? ¿Cuántas partes escuchas al decir CASA?" },
+      { id: "zapato", word: "ZAPATO", emoji: "👟", syllables: ["ZA", "PA", "TO"], question: "¿Qué usamos en los pies? Di ZAPATO dando una palmada por cada parte." },
+      { id: "camiseta", word: "CAMISETA", emoji: "👕", syllables: ["CA", "MI", "SE", "TA"], question: "¿Qué prenda de vestir aparece? ¿Puedes pronunciarla despacito?" }
+    ]
+  },
+  {
+    id: "naturaleza",
+    name: "Animales y naturaleza",
+    emoji: "🦋",
+    challenges: [
+      { id: "mariposa", word: "MARIPOSA", emoji: "🦋", syllables: ["MA", "RI", "PO", "SA"], question: "¿Qué animal vuela y tiene alas de colores? ¿Cómo se llama?" },
+      { id: "conejo", word: "CONEJO", emoji: "🐰", syllables: ["CO", "NE", "JO"], question: "¿Qué animal tiene orejas largas? Vamos a decir su nombre." },
+      { id: "luna", word: "LUNA", emoji: "🌙", syllables: ["LU", "NA"], question: "¿Qué vemos en el cielo durante la noche? ¿Cuántas palmadas damos?" },
+      { id: "elefante", word: "ELEFANTE", emoji: "🐘", syllables: ["E", "LE", "FAN", "TE"], question: "¿Qué animal grande tiene una trompa larga? Escucha con atención." }
+    ]
+  },
+  {
+    id: "alimentos",
+    name: "Alimentos",
+    emoji: "🍎",
+    challenges: [
+      { id: "manzana", word: "MANZANA", emoji: "🍎", syllables: ["MAN", "ZA", "NA"], question: "¿Qué fruta observas? Di MANZANA lentamente y escucha sus partes." },
+      { id: "tomate", word: "TOMATE", emoji: "🍅", syllables: ["TO", "MA", "TE"], question: "¿Qué alimento rojo aparece? ¿Puedes separarlo en partes?" }
+    ]
+  }
+];
+
+
+/* ==========================================
+   ESTADO DEL JUEGO
+========================================== */
+
+const allChallenges = categories.flatMap(category =>
+  category.challenges.map(challenge => ({
+    ...challenge,
+    categoryId: category.id,
+    categoryName: category.name
+  }))
+);
+
+let currentCategoryId = "objetos";
+let currentChallengeId = "pelota";
+let currentMode = "teacher";
+let gameFinished = false;
+
+const solvedChallenges = new Set();
+const answers = {};
+const tilesCache = {};
+
+
+/* ==========================================
+   SISTEMA DE SONIDOS
+========================================== */
+
+const sonidoCorrecto = new Audio("sonidos/correcto.mp3");
+const sonidoIncorrecto = new Audio("sonidos/incorrecto.mp3");
+
+sonidoCorrecto.preload = "auto";
+sonidoIncorrecto.preload = "auto";
+
+sonidoCorrecto.volume = 0.8;
+sonidoIncorrecto.volume = 0.8;
+
+let audioDesbloqueado = false;
+
+function unlockAudio() {
+  if (audioDesbloqueado) return;
+
+  audioDesbloqueado = true;
+
+  [sonidoCorrecto, sonidoIncorrecto].forEach(audio => {
+    audio.volume = 0;
+
+    const promise = audio.play();
+
+    if (promise !== undefined) {
+      promise.then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 0.8;
+      }).catch(() => {
+        audio.volume = 0.8;
+        audioDesbloqueado = false;
+      });
+    } else {
+      audio.volume = 0.8;
+    }
+  });
+}
+
+document.addEventListener("pointerdown", unlockAudio, {
+  once: true
+});
+
+function playFeedbackSound(type) {
+  let audio;
+
+  if (type === "correct") {
+    audio = sonidoCorrecto;
+  } else if (type === "incorrect") {
+    audio = sonidoIncorrecto;
+  } else {
+    return;
+  }
+
+  audio.pause();
+  audio.currentTime = 0;
+
+  audio.play().catch(error => {
+    console.warn("No se pudo reproducir el sonido:", error);
+  });
+}
+
+
+/* ==========================================
+   CONTADOR Y BARRA DE PROGRESO
+========================================== */
+
+function updateProgress() {
+  const completed = solvedChallenges.size;
+  const total = allChallenges.length;
+  const percentage = Math.round((completed / total) * 100);
+
+  const solvedCount = document.getElementById("solvedCount");
+
+  if (solvedCount) {
+    solvedCount.textContent = completed;
+  }
+
+  const progressElement = document.getElementById("completedChallenges");
+
+  if (progressElement) {
+    progressElement.textContent = completed;
+  }
+
+  const percentageElement = document.getElementById("progressPercentage");
+
+  if (percentageElement) {
+    percentageElement.textContent = percentage + "%";
+  }
+
+  const progressBar = document.getElementById("progressBar");
+
+  if (progressBar) {
+    progressBar.style.width = percentage + "%";
+  }
+
+  const progressText = document.getElementById("progressText");
+
+  if (progressText) {
+    progressText.textContent = `${completed} / ${total}`;
+  }
+
+  const completedCount = document.getElementById("completedCount");
+
+  if (completedCount) {
+    completedCount.textContent = completed;
+  }
+
+  console.log(`⭐ Retos superados: ${completed}/${total}`);
+}
+
+
+/* ==========================================
+   FUNCIONES AUXILIARES
+========================================== */
+
+function getCurrentChallenge() {
+  return allChallenges.find(
+    challenge => challenge.id === currentChallengeId
+  );
+}
+
+function getCurrentCategory() {
+  return categories.find(
+    category => category.id === currentCategoryId
+  );
+}
+
+function getTiles(challenge) {
+  if (!tilesCache[challenge.id]) {
+    const tiles = challenge.syllables.map((syllable, index) => ({
+      id: challenge.id + "-tile-" + index,
+      syllable
+    }));
+
+    tilesCache[challenge.id] = shuffleArray(tiles);
+  }
+
+  return tilesCache[challenge.id];
+}
+
+function getAnswer(challenge) {
+  if (!answers[challenge.id]) {
+    answers[challenge.id] = [];
+  }
+
+  return answers[challenge.id];
+}
+
+function shuffleArray(array) {
+  const copy = [...array];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy;
+}
+
+
+/* ==========================================
+   PROGRESO DE CATEGORÍAS
+========================================== */
+
+function isCategoryCompleted(category) {
+  return category.challenges.every(challenge =>
+    solvedChallenges.has(challenge.id)
+  );
+}
+
+function renderCategoryNav() {
+  const nav = document.getElementById("categoryNav");
+
+  if (!nav) return;
+
+  nav.innerHTML = "";
+
+  categories.forEach(category => {
+    const button = document.createElement("button");
+
+    const active = category.id === currentCategoryId;
+    const completed = isCategoryCompleted(category);
+
+    button.type = "button";
+
+    button.className =
+      "category-button border-2 rounded-xl px-3 py-2 text-sm font-bold transition ";
+
+    if (completed) {
+      button.className +=
+        "bg-emerald-100 border-emerald-500 text-emerald-800 shadow-sm";
+
+      button.textContent =
+        `✅ ${category.emoji} ${category.name}`;
+
+    } else if (active) {
+      button.className +=
+        "active border-slate-300 bg-white text-slate-700";
+
+      button.textContent =
+        `${category.emoji} ${category.name}`;
+
+    } else {
+      button.className +=
+        "bg-white border-slate-200 text-slate-600 hover:bg-slate-50";
+
+      button.textContent =
+        `${category.emoji} ${category.name}`;
+    }
+
+    button.onclick = () => selectCategory(category.id);
+
+    nav.appendChild(button);
+  });
+}
+
+function selectCategory(categoryId) {
+  if (gameFinished) return;
+
+  currentCategoryId = categoryId;
+
+  const category = getCurrentCategory();
+
+  currentChallengeId = category.challenges[0].id;
+
+  renderAll();
+}
+
+
+/* ==========================================
+   RENDERIZADO PRINCIPAL
+========================================== */
+
+function renderAll() {
+  renderCategoryNav();
+  renderCurrentChallenge();
+  updateProgress();
+}
+
+function renderCurrentChallenge() {
+  const challenge = getCurrentChallenge();
+
+  if (!challenge) return;
+
+  const category = getCurrentCategory();
+
+  const index = allChallenges.findIndex(
+    item => item.id === challenge.id
+  ) + 1;
+
+  document.getElementById("challengeBadge").textContent =
+    `⭐ Reto ${index} de ${allChallenges.length}`;
+
+  document.getElementById("categoryBadge").textContent =
+    `${category.emoji} ${category.name}`;
+
+  document.getElementById("pictureEmoji").textContent =
+    challenge.emoji;
+
+  document.getElementById("wordDisplay").textContent =
+    challenge.word;
+
+  document.getElementById("guidedQuestion").textContent =
+    challenge.question;
+
+  renderAnswerSlots();
+  renderSyllableOptions();
+  renderFeedbackForCurrent();
+  updateModeAppearance();
+}
+
+
+/* ==========================================
+   RESPUESTAS Y PIEZAS
+========================================== */
+
+function renderAnswerSlots() {
+  const challenge = getCurrentChallenge();
+  const container = document.getElementById("answerSlots");
+
+  if (!container) return;
+
+  const answer = getAnswer(challenge);
+
+  container.innerHTML = "";
+
+  challenge.syllables.forEach((syllable, index) => {
+    const selectedTileId = answer[index];
+
+    const selectedTile = selectedTileId
+      ? getTiles(challenge).find(
+          tile => tile.id === selectedTileId
+        )
+      : null;
+
+    const slot = document.createElement("button");
+
+    slot.type = "button";
+
+    slot.className =
+      "answer-slot rounded-xl border-2 flex items-center justify-center px-3 font-display text-xl font-bold " +
+      (selectedTile
+        ? "bg-emerald-100 border-emerald-400 text-emerald-800"
+        : "bg-white border-dashed border-slate-300 text-slate-300");
+
+    slot.textContent = selectedTile ? selectedTile.syllable : "?";
+
+    slot.setAttribute(
+      "aria-label",
+      selectedTile
+        ? `Sílaba ${selectedTile.syllable}, posición ${index + 1}. Toca para quitarla.`
+        : `Espacio vacío ${index + 1}`
+    );
+
+    if (
+      selectedTile &&
+      !solvedChallenges.has(challenge.id) &&
+      !gameFinished
+    ) {
+      slot.onclick = () => removeTile(index);
+    } else {
+      slot.disabled = true;
+    }
+
+    container.appendChild(slot);
+  });
+}
+
+function renderSyllableOptions() {
+  const challenge = getCurrentChallenge();
+  const container = document.getElementById("syllableOptions");
+
+  if (!container) return;
+
+  const answer = getAnswer(challenge);
+  const usedIds = new Set(answer);
+
+  container.innerHTML = "";
+
+  getTiles(challenge).forEach(tile => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+
+    button.className =
+      "syllable-tile bg-white border-2 border-sky-200 hover:border-sky-400 rounded-2xl px-5 py-4 min-w-16 text-2xl font-display font-bold text-sky-700 shadow-sm";
+
+    button.textContent = tile.syllable;
+
+    button.disabled =
+      usedIds.has(tile.id) ||
+      solvedChallenges.has(challenge.id) ||
+      gameFinished;
+
+    button.setAttribute(
+      "aria-label",
+      `Elegir sílaba ${tile.syllable}`
+    );
+
+    button.onclick = () => addTile(tile.id);
+
+    container.appendChild(button);
+  });
+}
+
+
+/* ==========================================
+   SELECCIONAR SÍLABAS
+========================================== */
+
+function addTile(tileId) {
+  unlockAudio();
+
+  const challenge = getCurrentChallenge();
+
+  if (gameFinished || solvedChallenges.has(challenge.id)) {
+    return;
+  }
+
+  const answer = getAnswer(challenge);
+
+  if (answer.length >= challenge.syllables.length) return;
+  if (answer.includes(tileId)) return;
+
+  answer.push(tileId);
+
+  renderAnswerSlots();
+  renderSyllableOptions();
+  hideFeedback();
+
+  if (answer.length === challenge.syllables.length) {
+    const challengeId = challenge.id;
+
+    setTimeout(() => {
+      if (
+        currentChallengeId === challengeId &&
+        !gameFinished
+      ) {
+        checkAnswer();
+      }
+    }, 350);
+  }
+}
+
+function removeTile(index) {
+  const challenge = getCurrentChallenge();
+
+  if (gameFinished || solvedChallenges.has(challenge.id)) {
+    return;
+  }
+
+  const answer = getAnswer(challenge);
+
+  answer.splice(index, 1);
+
+  renderAnswerSlots();
+  renderSyllableOptions();
+  hideFeedback();
+}
+
+
+/* ==========================================
+   COMPROBACIÓN AUTOMÁTICA
+========================================== */
+
+function checkAnswer() {
+  const challenge = getCurrentChallenge();
+
+  if (gameFinished || solvedChallenges.has(challenge.id)) {
+    return;
+  }
+
+  const answer = getAnswer(challenge);
+
+  if (answer.length !== challenge.syllables.length) {
+    return;
+  }
+
+  const selectedSyllables = answer.map(tileId => {
+    const tile = getTiles(challenge).find(
+      tile => tile.id === tileId
+    );
+
+    return tile ? tile.syllable : "";
+  });
+
+  const correct = selectedSyllables.every(
+    (syllable, index) =>
+      syllable === challenge.syllables[index]
+  );
+
+  if (correct) {
+    playFeedbackSound("correct");
+
+    markSolved(challenge);
+
+    showFeedback(
+      "🎉 ¡Excelente! ¡Separaste correctamente la palabra!",
+      "success"
+    );
+
+    speakText(
+      "¡Muy bien! " + challenge.syllables.join(", ")
+    );
+
+  } else {
+    playFeedbackSound("incorrect");
+
+    showFeedback(
+      "💛 ¡Buen intento! Toca las sílabas para corregir el orden.",
+      "error"
+    );
+  }
+
+  renderAnswerSlots();
+  renderSyllableOptions();
+}
+
+
+/* ==========================================
+   RESPUESTA PARA EL DOCENTE
+========================================== */
+
+function revealTeacherAnswer() {
+  unlockAudio();
+
+  const challenge = getCurrentChallenge();
+
+  if (gameFinished) return;
+
+  if (solvedChallenges.has(challenge.id)) {
+    showFeedback(
+      "🌟 Esta palabra ya está completada. ¡Excelente trabajo!",
+      "success"
+    );
+    return;
+  }
+
+  const tiles = getTiles(challenge);
+  const availableTiles = [...tiles];
+
+  const exactOrder = challenge.syllables.map(syllable => {
+    const tileIndex = availableTiles.findIndex(
+      tile => tile.syllable === syllable
+    );
+
+    const [tile] = availableTiles.splice(tileIndex, 1);
+
+    return tile.id;
+  });
+
+  answers[challenge.id] = exactOrder;
+
+  playFeedbackSound("correct");
+
+  markSolved(challenge);
+
+  renderAnswerSlots();
+  renderSyllableOptions();
+
+  showFeedback(
+    "👏 ¡Muy bien! La palabra se separa así: " +
+      challenge.syllables.join(" - "),
+    "success"
+  );
+
+  speakText(challenge.syllables.join(", "));
+}
+
+
+/* ==========================================
+   RETOS COMPLETADOS
+========================================== */
+
+function markSolved(challenge) {
+  if (solvedChallenges.has(challenge.id)) return;
+
+  solvedChallenges.add(challenge.id);
+
+  // Actualizar contador.
+  updateProgress();
+
+  // Actualizar inmediatamente el color de las categorías.
+  renderCategoryNav();
+
+  // Comprobar si todos los retos están completados.
+  checkAllCompleted();
+}
+
+function renderFeedbackForCurrent() {
+  const challenge = getCurrentChallenge();
+
+  if (solvedChallenges.has(challenge.id)) {
+    showFeedback(
+      "🌟 ¡Reto superado! " +
+        challenge.syllables.join(" - "),
+      "success"
+    );
+  } else {
+    hideFeedback();
+  }
+}
+
+
+/* ==========================================
+   MENSAJES DE RETROALIMENTACIÓN
+========================================== */
+
+function showFeedback(message, type) {
+  const box = document.getElementById("feedbackBox");
+
+  if (!box) return;
+
+  box.className =
+    "mt-5 rounded-2xl p-4 text-center font-bold text-sm sm:text-base pop-success";
+
+  if (type === "success") {
+    box.classList.add(
+      "bg-emerald-100",
+      "text-emerald-800",
+      "border",
+      "border-emerald-300"
+    );
+  } else if (type === "warning") {
+    box.classList.add(
+      "bg-amber-100",
+      "text-amber-800",
+      "border",
+      "border-amber-300"
+    );
+  } else {
+    box.classList.add(
+      "bg-rose-100",
+      "text-rose-800",
+      "border",
+      "border-rose-300"
+    );
+  }
+
+  box.textContent = message;
+}
+
+function hideFeedback() {
+  const box = document.getElementById("feedbackBox");
+
+  if (!box) return;
+
+  box.className =
+    "hidden mt-5 rounded-2xl p-4 text-center font-bold text-sm sm:text-base";
+
+  box.textContent = "";
+}
+
+
+/* ==========================================
+   NAVEGACIÓN DE RETOS
+========================================== */
+
+function previousChallenge() {
+  if (gameFinished) return;
+
+  moveChallenge(-1);
+}
+
+function nextChallenge() {
+  if (gameFinished) return;
+
+  moveChallenge(1);
+}
+
+function moveChallenge(direction) {
+  if (gameFinished) return;
+
+  const currentIndex = allChallenges.findIndex(
+    challenge => challenge.id === currentChallengeId
+  );
+
+  const nextIndex = Math.max(
+    0,
+    Math.min(
+      allChallenges.length - 1,
+      currentIndex + direction
+    )
+  );
+
+  const next = allChallenges[nextIndex];
+
+  currentChallengeId = next.id;
+  currentCategoryId = next.categoryId;
+
+  renderAll();
+}
+
+
+/* ==========================================
+   MODOS DE USO
+========================================== */
+
+function setMode(mode) {
+  if (gameFinished) return;
+
+  currentMode = mode;
+
+  updateModeAppearance();
+}
+
+function updateModeAppearance() {
+  const teacherBtn = document.getElementById("modeTeacherBtn");
+  const studentBtn = document.getElementById("modeStudentBtn");
+  const teacherPanel = document.getElementById("teacherPanel");
+
+  if (!teacherBtn || !studentBtn || !teacherPanel) return;
+
+  if (currentMode === "teacher") {
+    teacherBtn.className =
+      "px-3 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white shadow text-emerald-700";
+
+    studentBtn.className =
+      "px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-500";
+
+    teacherPanel.classList.remove("hidden");
+
+  } else {
+    studentBtn.className =
+      "px-3 py-2 rounded-lg text-xs sm:text-sm font-bold bg-white shadow text-emerald-700";
+
+    teacherBtn.className =
+      "px-3 py-2 rounded-lg text-xs sm:text-sm font-bold text-slate-500";
+
+    teacherPanel.classList.add("hidden");
+  }
+}
+
+
+/* ==========================================
+   AUDIO Y PRONUNCIACIÓN
+========================================== */
+
+function speakText(text) {
+  if (!("speechSynthesis" in window)) {
+    showFeedback(
+      "Tu navegador no dispone de lectura de voz. Puedes leer la palabra en voz alta.",
+      "warning"
+    );
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "es-ES";
+  utterance.rate = 0.78;
+  utterance.pitch = 1.05;
+
+  const voices = window.speechSynthesis.getVoices();
+
+  const spanishVoice = voices.find(voice =>
+    voice.lang.toLowerCase().startsWith("es")
+  );
+
+  if (spanishVoice) {
+    utterance.voice = spanishVoice;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function speakWord() {
+  if (gameFinished) return;
+
+  const challenge = getCurrentChallenge();
+
+  speakText(challenge.word);
+}
+
+function speakSyllables() {
+  if (gameFinished) return;
+
+  const challenge = getCurrentChallenge();
+
+  speakText(challenge.syllables.join(" ... "));
+}
+
+
+/* ==========================================
+   GUÍA Y MODAL
+========================================== */
+
+function openGuide() {
+  const modal = document.getElementById("guideModal");
+
+  if (modal) {
+    modal.classList.remove("hidden");
+  }
+}
+
+function closeGuide() {
+  const modal = document.getElementById("guideModal");
+
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+function closeGuideModal() {
+  closeGuide();
+}
+
+const guideModal = document.getElementById("guideModal");
+
+if (guideModal) {
+  guideModal.addEventListener("click", event => {
+    if (event.target.id === "guideModal") {
+      closeGuide();
+    }
+  });
+}
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeGuide();
+  }
+});
+
+
+/* ==========================================
+   PANTALLA FINAL
+========================================== */
+
+function checkAllCompleted() {
+  if (solvedChallenges.size === allChallenges.length) {
+    showCompletionScreen();
+  }
+}
+
+function showCompletionScreen() {
+  if (gameFinished) return;
+
+  gameFinished = true;
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  const completion = document.createElement("div");
+
+  completion.id = "completionScreen";
+
+  completion.className =
+    "fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4";
+
+  completion.innerHTML = `
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-300
+                max-w-lg w-full p-7 sm:p-10 text-center pop-success">
+
+      <div class="text-7xl mb-4">🏆</div>
+
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-emerald-700 mb-3">
+        ¡Felicidades!
+      </h2>
+
+      <p class="text-lg font-bold text-slate-800 mb-3">
+        ¡Completaste la aventura!
+      </p>
+
+      <p class="text-slate-600 mb-6">
+        Has logrado separar todas las palabras en sílabas.
+        ¡Eres un gran explorador de sonidos!
+      </p>
+
+      <div class="bg-emerald-50 rounded-2xl p-4 mb-6 border border-emerald-200">
+
+        <p class="text-3xl">⭐ 🌟 ⭐</p>
+
+        <p class="font-bold text-emerald-800 mt-2">
+          ${allChallenges.length} de ${allChallenges.length} retos completados
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        onclick="restartGame()"
+        class="w-full px-6 py-4 rounded-2xl bg-emerald-500
+               hover:bg-emerald-600 text-white font-bold text-lg
+               shadow-lg transition cursor-pointer">
+
+        🔄 Volver a jugar
+
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(completion);
+}
+
+
+/* ==========================================
+   REINICIAR JUEGO
+========================================== */
+
+function restartGame() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  solvedChallenges.clear();
+
+  updateProgress();
+
+  Object.keys(answers).forEach(key => {
+    delete answers[key];
+  });
+
+  Object.keys(tilesCache).forEach(key => {
+    delete tilesCache[key];
+  });
+
+  currentCategoryId = "objetos";
+  currentChallengeId = "pelota";
+  currentMode = "teacher";
+  gameFinished = false;
+
+  const completion = document.getElementById("completionScreen");
+
+  if (completion) {
+    completion.remove();
+  }
+
+  renderAll();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  console.log("🔄 Aventura de las Sílabas reiniciada correctamente.");
+}
+
+
+/* ==========================================
+   INICIAR JUEGO
+========================================== */
+
+renderAll();
+updateProgress();
+
+</script>
+
+</body>
+</html>
