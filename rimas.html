@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presentación Interactiva de Rimas — Recurso N.° 7</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Tipografía amigable para educación inicial y primer grado */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #fefce8 50%, #fdf2f8 100%);
+      min-height: 100vh;
+      color: #1e293b;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', 'Inter', sans-serif;
+    }
+
+    /* Animaciones suaves y amables para retroalimentación */
+    @keyframes popBounce {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.06); }
+      70% { transform: scale(0.98); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .animate-celebrate {
+      animation: popBounce 0.55s ease-out;
+    }
+
+    .animate-retry {
+      animation: gentleShake 0.35s ease-in-out;
+    }
+
+    /* Resaltado sutil de la terminación fonológica */
+    .rima-highlight {
+      background-color: #fef08a;
+      color: #9a3412;
+      padding: 0 0.25rem;
+      border-radius: 0.375rem;
+      font-weight: 700;
+    }
+/* BOTÓN DE INICIO TRANSPARENTE */
+.home-button {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+  color: #7c3aed;
+  font-size: 26px;
+
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 15px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  z-index: 9999;
+
+  transition: all 0.2s ease;
+}
+
+.home-button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-amber-950">
+  <!-- Contenedor principal adaptable a pantalla grande, proyector y tablet -->
+  <div id="app" class="min-h-screen flex flex-col justify-between max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 gap-4">
+
+    <!-- Encabezado superior con título del recurso y botón de Guía Docente -->
+    <header class="bg-white/95 backdrop-blur rounded-3xl shadow-md border-2 border-sky-100 p-4 sm:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <!-- Ilustración SVG de insignia fonológica -->
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-orange-400 to-rose-400 flex items-center justify-center shadow-inner shrink-0" aria-hidden="true">
+          <svg viewBox="0 0 64 64" class="w-10 h-10 text-white">
+            <path fill="currentColor" d="M24 12v28.6A9.96 9.96 0 0 0 18 39c-5.52 0-10 4.03-10 9s4.48 9 10 9 10-4.03 10-9V22l22-5v19.6A9.96 9.96 0 0 0 44 35c-5.52 0-10 4.03-10 9s4.48 9 10 9 10-4.03 10-9V8L24 12z"/>
+          </svg>
+        </div>
+        
+        <div>
+          <span class="inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider px-3 py-0.5 rounded-full bg-sky-100 text-sky-800 mb-1">
+            Recurso Digital N.° 7 · Conciencia Fonológica
+          </span>
+          <h1 class="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+            Presentación Interactiva de Rimas
+          </h1>
+        </div>
+      </div>
+
+      <!-- Controles de vista: Etiquetas de palabras y Guía Docente -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <button
+          id="toggleLabelsBtn"
+          type="button"
+          onclick="toggleLabels()"
+          class="px-4 py-2.5 rounded-2xl border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 active:scale-95 text-amber-950 font-semibold text-sm sm:text-base transition flex items-center gap-2 cursor-pointer"
+          aria-pressed="false"
+        >
+          <span id="labelsIcon">👁️</span>
+          <span id="labelsText">Mostrar palabras: Ocultas</span>
+        </button>
+
+        <button
+          id="openGuideBtn"
+          type="button"
+          onclick="openGuideModal()"
+          class="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold text-sm sm:text-base shadow-sm transition flex items-center gap-2 cursor-pointer"
+        >
+          <span>📋</span>
+          <span>Guía Docente y Rúbrica</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Índice de rondas para saltar directamente a cualquier diapositiva -->
+    <nav aria-label="Índice de rondas de rimas" class="bg-white/90 rounded-2xl shadow-sm border border-slate-200/80 p-2.5 sm:px-4">
+      <div class="flex items-center justify-between gap-2 overflow-x-auto pb-1 sm:pb-0" id="roundsIndex">
+        <!-- Generado dinámicamente por JS -->
+      </div>
+    </nav>
+
+    <!-- Área principal de la diapositiva interactiva -->
+    <main class="flex-1 flex flex-col gap-4">
+      <section
+        id="slideCard"
+        aria-live="polite"
+        class="bg-white rounded-3xl shadow-lg border-2 border-amber-200/80 p-4 sm:p-7 flex flex-col gap-5 sm:gap-6"
+      >
+        <!-- Cabecera de ronda y palabra objetivo -->
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b-2 border-dashed border-slate-200 pb-5">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span id="roundBadge" class="px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 font-bold text-sm sm:text-base">
+                Ronda 1 de 6
+              </span>
+              <span id="rhymeFamilyBadge" class="px-3 py-1 rounded-full bg-purple-100 text-purple-900 font-semibold text-xs sm:text-sm">
+                Rima consonante /asonante
+              </span>
+            </div>
+            <h2 id="questionText" class="font-display text-2xl sm:text-4xl font-bold text-slate-900 pt-1">
+              ¿Qué imagen rima con GATO?
+            </h2>
+          </div>
+
+          <!-- Tarjeta visual de la palabra objetivo + Botón de audio ("Escuchar pregunta") -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl px-4 py-2.5 flex items-center gap-3 justify-center">
+              <div id="targetSvgContainer" class="w-14 h-14 sm:w-16 sm:h-16 shrink-0" aria-hidden="true"></div>
+              <div class="text-left">
+                <span class="block text-xs uppercase tracking-wide font-bold text-amber-700">Palabra clave</span>
+                <span id="targetWordDisplay" class="font-display text-2xl sm:text-3xl font-bold text-slate-900">GATO</span>
+              </div>
+            </div>
+
+            <button
+              id="listenQuestionBtn"
+              type="button"
+              onclick="speakCurrentQuestion()"
+              class="px-5 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 active:scale-95 text-white font-bold text-base sm:text-lg shadow-md transition flex items-center justify-center gap-2.5 cursor-pointer"
+            >
+              <span class="text-2xl" aria-hidden="true">🔊</span>
+              <span>Escuchar pregunta</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Guion de voz docente / Respaldo visual claro cuando no hay audio o para leer en voz alta -->
+        <div class="bg-sky-50/90 border border-sky-200 rounded-2xl p-3.5 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="text-sm sm:text-base text-sky-950">
+            <span class="font-bold text-sky-800">🎙️ Guion de voz docente:</span>
+            <span id="teacherScriptText" class="italic"></span>
+          </div>
+          <span id="audioStatusBadge" class="text-xs font-semibold px-3 py-1 rounded-full bg-white text-sky-800 border border-sky-200 self-start sm:self-center shrink-0">
+            Listo para leer en voz alta
+          </span>
+        </div>
+
+        <!-- Opciones interactivas grandes para elegir qué imágenes riman -->
+        <div>
+          <p class="text-sm sm:text-base font-semibold text-slate-600 mb-3">
+            Toca o haz clic en la imagen cuyo nombre rime con la palabra clave:
+          </p>
+          <div id="optionsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            <!-- Tarjetas de opciones generadas por JS -->
+          </div>
+        </div>
+
+        <!-- Retroalimentación visual y sonora amable -->
+        <div id="feedbackBox" class="hidden rounded-2xl p-4 sm:p-5 border-2 transition-all" role="status" aria-live="polite">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-start sm:items-center gap-3">
+              <span id="feedbackEmoji" class="text-3xl sm:text-4xl shrink-0" aria-hidden="true">🎉</span>
+              <div>
+                <h3 id="feedbackTitle" class="font-display text-xl sm:text-2xl font-bold"></h3>
+                <p id="feedbackDetail" class="text-sm sm:text-base mt-0.5"></p>
+              </div>
+            </div>
+            <button
+              id="speakFeedbackBtn"
+              type="button"
+              onclick="speakCurrentFeedback()"
+              class="px-4 py-2 rounded-xl bg-white/90 hover:bg-white border border-current font-semibold text-sm flex items-center gap-1.5 self-start sm:self-center shrink-0 cursor-pointer"
+            >
+              <span>🔈</span>
+              <span>Leer pista</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Espacio visible de "Explicación del niño / Pregunta guiada para explicar su respuesta" -->
+        <div class="bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 border-2 border-amber-300/90 rounded-2xl p-4 sm:p-5 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <label for="childExplanationInput" class="font-display text-lg sm:text-xl font-bold text-amber-950 flex items-center gap-2">
+              <span class="text-2xl" aria-hidden="true">💬</span>
+              <span>Explicación del niño / Pregunta guiada para explicar su respuesta</span>
+            </label>
+            <button
+              type="button"
+              onclick="speakGuidedPrompt()"
+              class="px-3.5 py-1.5 rounded-xl bg-amber-200/80 hover:bg-amber-300/80 text-amber-950 font-semibold text-xs sm:text-sm flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+            >
+              <span>🗣️</span>
+              <span>Leer pregunta guiada</span>
+            </button>
+          </div>
+
+          <p id="guidedQuestionText" class="text-sm sm:text-base font-medium text-amber-900 bg-white/80 rounded-xl px-4 py-2.5 border border-amber-200">
+            ¿Por qué crees que «pato» rima con «gato»? ¿En qué se parecen al final cuando las dices en voz alta?
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-2.5">
+            <input
+              id="childExplanationInput"
+              type="text"
+              placeholder="Escribe aquí lo que responde o explica el niño o la niña..."
+              class="flex-1 rounded-xl border-2 border-amber-300 bg-white px-4 py-2.5 text-sm sm:text-base text-slate-800 focus:outline-none focus:border-amber-500"
+              oninput="saveChildExplanation(this.value)"
+            />
+            <button
+              type="button"
+              onclick="clearChildExplanation()"
+              class="px-4 py-2.5 rounded-xl bg-white hover:bg-amber-100 border-2 border-amber-200 text-amber-900 font-semibold text-sm transition cursor-pointer"
+            >
+              Limpiar nota
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Barra inferior de navegación (Anterior / Siguiente y contador de aciertos) -->
+    <footer class="bg-white/95 rounded-2xl shadow-md border-2 border-sky-100 p-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <button
+        id="prevSlideBtn"
+        type="button"
+        onclick="goToSlide(currentIndex - 1)"
+        class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-800 font-bold text-base sm:text-lg transition flex items-center justify-center gap-2 cursor-pointer"
+      >
+        <span>⬅️</span>
+        <span>Anterior</span>
+      </button>
+
+      <div class="flex items-center gap-3 text-sm sm:text-base font-semibold text-slate-700">
+        <span class="px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900">
+          ⭐ Rondas resueltas: <strong id="solvedCount">0</strong> / <span id="totalRoundsCount">6</span>
+        </span>
+      </div>
+
+      <button
+        id="nextSlideBtn"
+        type="button"
+        onclick="goToSlide(currentIndex + 1)"
+        class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:pointer-events-none text-white font-bold text-base sm:text-lg shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+      >
+        <span>Siguiente</span>
+        <span>➡️</span>
+      </button>
+    </footer>
+  </div>
+
+  <!-- Modal discreto de "Guía Docente y Rúbrica (Criterio 7)" -->
+  <div
+    id="guideModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-6 overflow-y-auto"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="guideModalTitle"
+  >
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-indigo-200 p-5 sm:p-8 space-y-6 my-auto">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 mb-1">
+            Criterio 7 · Desarrollo de la Conciencia Fonológica
+          </span>
+          <h2 id="guideModalTitle" class="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            Guía Docente y Alineación con la Rúbrica
+          </h2>
+        </div>
+        <button
+          type="button"
+          onclick="closeGuideModal()"
+          aria-label="Cerrar guía docente"
+          class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-rose-100 hover:text-rose-700 text-slate-700 font-bold text-xl flex items-center justify-center transition cursor-pointer shrink-0"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- 1. Objetivo fonológico -->
+      <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 sm:p-5 space-y-2">
+        <h3 class="font-display text-xl font-bold text-sky-950">🎯 Objetivo Fonológico</h3>
+        <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+          Desarrollar la <strong>conciencia fonológica (detección y producción de rimas)</strong> en niños y niñas de educación inicial y primer grado mediante la discriminación auditiva de similitudes sonoras al final de las palabras, favoreciendo además la metacognición y expresión oral al explicar por qué dos palabras riman.
+        </p>
+      </div>
+
+      <!-- 2. Pasos de aplicación en el aula -->
+      <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5 space-y-2.5">
+        <h3 class="font-display text-xl font-bold text-emerald-950">🪜 Pasos de Aplicación Pedagógica</h3>
+        <ol class="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-700">
+          <li><strong>Activación y escucha atenta:</strong> Proyecte la diapositiva y pulse <em>«Escuchar pregunta»</em> (o lea el guion docente). Mantenga las palabras ocultas al inicio para priorizar el oído fonológico sobre la decodificación visual.</li>
+          <li><strong>Exploración de opciones:</strong> Nombre cada imagen con claridad, alargando suavemente la sílaba o sonido final para facilitar la comparación auditiva.</li>
+          <li><strong>Selección y retroalimentación:</strong> Invite a un niño o niña a elegir la imagen que rima. Si acierta, celebre y destaque la terminación compartida; si reintenta, ofrezca una pista sonora amable sin sanción.</li>
+          <li><strong>Explicación oral guiada:</strong> Formule la <em>Pregunta guiada</em> para que el niño explique con sus propias palabras por qué riman y registre su respuesta en el campo correspondiente.</li>
+        </ol>
+      </div>
+
+      <!-- 3. Criterios de observación del progreso infantil -->
+      <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-2.5">
+        <h3 class="font-display text-xl font-bold text-amber-950">👀 Criterios de Observación del Progreso Infantil</h3>
+        <ul class="list-disc list-inside space-y-1.5 text-sm sm:text-base text-slate-700">
+          <li><strong>Reconocimiento auditivo:</strong> Identifica correctamente qué palabra comparte sonido final con la palabra clave.</li>
+          <li><strong>Justificación fonológica:</strong> Explica la rima señalando la semejanza sonora final (por ejemplo: <em>«gato y pato terminan igual, -ato»</em>), más allá de solo decir «porque son bonitos» o «porque es un animal».</li>
+          <li><strong>Participación y autonomía:</strong> Responde a consignas orales y utiliza el apoyo visual/auditivo con seguridad.</li>
+        </ul>
+      </div>
+
+      <!-- 4. Alineación con la Rúbrica (Claridad, Pertinencia, Rigor Metodológico y Formato) -->
+      <div class="border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
+        <h3 class="font-display text-xl font-bold text-slate-900">✅ Alineación con los Criterios de la Rúbrica</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-sm">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-indigo-900 mb-1">Claridad del informe y del recurso</p>
+            <p class="text-slate-700">Vincula explícitamente el recurso digital N.° 7 con el desarrollo de la conciencia fonológica y ofrece ejemplos concretos de aplicación en aula inicial y primer grado.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-indigo-900 mb-1">Pertinencia del contenido</p>
+            <p class="text-slate-700">Centrado en imágenes grandes, preguntas de audio/voz docente, selección de rimas y justificación oral de la respuesta, tal como pide el Criterio 7.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-indigo-900 mb-1">Rigor metodológico</p>
+            <p class="text-slate-700">Incluye secuencia didáctica paso a paso, guion de voz docente, control de etiquetas de texto y criterios observables para evaluar el progreso fonológico infantil.</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <p class="font-bold text-indigo-900 mb-1">Presentación y formato limpio</p>
+            <p class="text-slate-700">Estructura jerárquica, tipografía legible, botones amplios, contraste adecuado y diseño responsivo listo para proyector o pantalla táctil.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button
+          type="button"
+          onclick="closeGuideModal()"
+          class="px-6 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition cursor-pointer"
+        >
+          Volver a la presentación
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- BOTÓN PARA REGRESAR AL MENÚ PRINCIPAL -->
+<a href="index.html" class="home-button" title="Volver al menú principal">
+  🏠
+</a>
+
+  <script>
+
+
+/**
+ * =========================================
+ * PRESENTACIÓN INTERACTIVA DE RIMAS
+ * Recurso Digital N.° 7
+ * =========================================
+ *
+ * Ilustraciones SVG limpias, grandes y coloridas.
+ * Código actualizado y organizado.
+ */
+
+/* =========================================
+   1. ILUSTRACIONES SVG
+========================================= */
+
+const SVG_ART = {
+  gato: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#ffedd5"/>
+      <polygon points="28,52 34,20 54,42" fill="#fb923c" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="92,52 86,20 66,42" fill="#fb923c" stroke="#c2410c" stroke-width="3" stroke-linejoin="round"/>
+      <ellipse cx="60" cy="64" rx="34" ry="29" fill="#fdba74" stroke="#c2410c" stroke-width="3"/>
+      <circle cx="46" cy="60" r="6" fill="#1e293b"/>
+      <circle cx="74" cy="60" r="6" fill="#1e293b"/>
+      <circle cx="44" cy="58" r="2" fill="#ffffff"/>
+      <circle cx="72" cy="58" r="2" fill="#ffffff"/>
+      <polygon points="60,67 55,73 65,73" fill="#f43f5e"/>
+      <path d="M52 78 Q60 85 68 78" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+      <line x1="20" y1="66" x2="36" y2="69" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="20" y1="75" x2="36" y2="74" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="100" y1="66" x2="84" y2="69" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="100" y1="75" x2="84" y2="74" stroke="#9a3412" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`,
+
+  pato: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fef9c3"/>
+      <ellipse cx="62" cy="74" rx="30" ry="21" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+      <circle cx="44" cy="48" r="18" fill="#fde047" stroke="#ca8a04" stroke-width="3"/>
+      <ellipse cx="25" cy="50" rx="10" ry="6" fill="#f97316" stroke="#c2410c" stroke-width="2.5"/>
+      <circle cx="47" cy="44" r="4" fill="#1e293b"/>
+      <circle cx="46" cy="43" r="1.5" fill="#fff"/>
+      <path d="M54 70 Q70 64 80 75 Q68 84 54 78 Z" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+    </svg>`,
+
+  perro: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#e0f2fe"/>
+      <ellipse cx="32" cy="64" rx="11" ry="22" transform="rotate(14 32 64)" fill="#a16207" stroke="#713f12" stroke-width="3"/>
+      <ellipse cx="88" cy="64" rx="11" ry="22" transform="rotate(-14 88 64)" fill="#a16207" stroke="#713f12" stroke-width="3"/>
+      <circle cx="60" cy="60" r="28" fill="#d97706" stroke="#78350f" stroke-width="3"/>
+      <ellipse cx="60" cy="70" rx="14" ry="10" fill="#fef3c7"/>
+      <ellipse cx="60" cy="66" rx="6" ry="4.5" fill="#1e293b"/>
+      <circle cx="49" cy="53" r="4.5" fill="#1e293b"/>
+      <circle cx="71" cy="53" r="4.5" fill="#1e293b"/>
+      <path d="M56 77 Q60 88 64 77 Z" fill="#fb7185"/>
+    </svg>`,
+
+  mesa: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#f3e8ff"/>
+      <rect x="20" y="42" width="80" height="16" rx="6" fill="#c084fc" stroke="#6b21a8" stroke-width="3"/>
+      <rect x="28" y="58" width="10" height="34" rx="4" fill="#a855f7" stroke="#6b21a8" stroke-width="3"/>
+      <rect x="82" y="58" width="10" height="34" rx="4" fill="#a855f7" stroke="#6b21a8" stroke-width="3"/>
+    </svg>`,
+
+  sol: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fef3c7"/>
+      <g stroke="#f59e0b" stroke-width="5" stroke-linecap="round">
+        <line x1="60" y1="14" x2="60" y2="26"/>
+        <line x1="60" y1="94" x2="60" y2="106"/>
+        <line x1="14" y1="60" x2="26" y2="60"/>
+        <line x1="94" y1="60" x2="106" y2="60"/>
+        <line x1="27" y1="27" x2="36" y2="36"/>
+        <line x1="84" y1="84" x2="93" y2="93"/>
+        <line x1="93" y1="27" x2="84" y2="36"/>
+        <line x1="36" y1="84" x2="27" y2="93"/>
+      </g>
+      <circle cx="60" cy="60" r="24" fill="#facc15" stroke="#d97706" stroke-width="3"/>
+      <circle cx="52" cy="57" r="3.5" fill="#78350f"/>
+      <circle cx="68" cy="57" r="3.5" fill="#78350f"/>
+      <path d="M52 67 Q60 74 68 67" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+    </svg>`,
+
+  caracol: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#dcfce7"/>
+      <path d="M22 82 Q55 92 96 78 Q92 66 72 68 L28 72 Z" fill="#86efac" stroke="#15803d" stroke-width="3"/>
+      <line x1="84" y1="68" x2="88" y2="48" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="88" cy="46" r="4" fill="#16a34a"/>
+      <circle cx="54" cy="60" r="21" fill="#f97316" stroke="#9a3412" stroke-width="3"/>
+      <path d="M54 60 m-11 0 a11 11 0 1 0 22 0 a7 7 0 1 0 -14 0" fill="none" stroke="#fff7ed" stroke-width="2.5"/>
+    </svg>`,
+
+  flor: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fce7f3"/>
+      <rect x="57" y="64" width="6" height="34" rx="3" fill="#22c55e"/>
+      <ellipse cx="47" cy="82" rx="10" ry="5" transform="rotate(-25 47 82)" fill="#4ade80"/>
+      <circle cx="60" cy="34" r="13" fill="#f472b6"/>
+      <circle cx="82" cy="48" r="13" fill="#f472b6"/>
+      <circle cx="74" cy="72" r="13" fill="#f472b6"/>
+      <circle cx="46" cy="72" r="13" fill="#f472b6"/>
+      <circle cx="38" cy="48" r="13" fill="#f472b6"/>
+      <circle cx="60" cy="54" r="12" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+    </svg>`,
+
+  tren: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#e0e7ff"/>
+      <rect x="28" y="34" width="62" height="44" rx="10" fill="#6366f1" stroke="#3730a3" stroke-width="3"/>
+      <rect x="38" y="42" width="18" height="15" rx="4" fill="#e0f2fe"/>
+      <rect x="62" y="42" width="18" height="15" rx="4" fill="#e0f2fe"/>
+      <rect x="74" y="22" width="10" height="14" rx="3" fill="#4f46e5" stroke="#3730a3" stroke-width="2.5"/>
+      <circle cx="42" cy="82" r="9" fill="#334155"/>
+      <circle cx="76" cy="82" r="9" fill="#334155"/>
+    </svg>`,
+
+  luna: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#ede9fe"/>
+      <path d="M74 26 A32 32 0 1 0 92 78 A26 26 0 1 1 74 26 Z" fill="#facc15" stroke="#ca8a04" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="82" cy="36" r="3" fill="#fef08a"/>
+      <circle cx="89" cy="50" r="2" fill="#fef08a"/>
+    </svg>`,
+
+  cuna: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fef2f2"/>
+      <rect x="26" y="46" width="68" height="32" rx="6" fill="#fda4af" stroke="#be123c" stroke-width="3"/>
+      <line x1="36" y1="46" x2="36" y2="78" stroke="#be123c" stroke-width="3"/>
+      <line x1="48" y1="46" x2="48" y2="78" stroke="#be123c" stroke-width="3"/>
+      <line x1="72" y1="46" x2="72" y2="78" stroke="#be123c" stroke-width="3"/>
+      <line x1="84" y1="46" x2="84" y2="78" stroke="#be123c" stroke-width="3"/>
+      <path d="M22 86 Q60 96 98 86" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round"/>
+    </svg>`,
+
+  arbol: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#ecfdf5"/>
+      <rect x="53" y="64" width="14" height="32" rx="4" fill="#92400e"/>
+      <circle cx="60" cy="48" r="24" fill="#22c55e" stroke="#15803d" stroke-width="3"/>
+      <circle cx="42" cy="54" r="16" fill="#4ade80"/>
+      <circle cx="78" cy="54" r="16" fill="#4ade80"/>
+    </svg>`,
+
+  queso: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fefce8"/>
+      <polygon points="24,76 62,34 96,76" fill="#facc15" stroke="#ca8a04" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="58" cy="64" r="5" fill="#eab308"/>
+      <circle cx="74" cy="68" r="4" fill="#eab308"/>
+      <circle cx="64" cy="50" r="3.5" fill="#eab308"/>
+    </svg>`,
+
+  raton: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#f1f5f9"/>
+      <path d="M24 78 Q14 64 24 54" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="62" cy="68" rx="28" ry="18" fill="#cbd5e1" stroke="#475569" stroke-width="3"/>
+      <circle cx="76" cy="52" r="10" fill="#cbd5e1" stroke="#475569" stroke-width="3"/>
+      <circle cx="80" cy="64" r="3.5" fill="#1e293b"/>
+      <circle cx="91" cy="68" r="3.5" fill="#f43f5e"/>
+    </svg>`,
+
+  pelota: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#eff6ff"/>
+      <circle cx="60" cy="60" r="32" fill="#38bdf8" stroke="#0369a1" stroke-width="3"/>
+      <path d="M32 48 Q60 64 88 48" fill="none" stroke="#ffffff" stroke-width="4"/>
+      <circle cx="60" cy="60" r="9" fill="#facc15" stroke="#ca8a04" stroke-width="2.5"/>
+    </svg>`,
+
+  reloj: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fff7ed"/>
+      <circle cx="60" cy="62" r="28" fill="#ffffff" stroke="#ea580c" stroke-width="4"/>
+      <line x1="60" y1="62" x2="60" y2="45" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="60" y1="62" x2="74" y2="62" stroke="#ea580c" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="60" cy="62" r="3.5" fill="#1e293b"/>
+    </svg>`,
+
+  pina: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fef9c3"/>
+      <polygon points="60,18 52,40 68,40" fill="#16a34a"/>
+      <polygon points="44,24 38,42 54,42" fill="#22c55e"/>
+      <polygon points="76,24 66,42 82,42" fill="#22c55e"/>
+      <ellipse cx="60" cy="68" rx="22" ry="28" fill="#facc15" stroke="#ca8a04" stroke-width="3"/>
+      <path d="M44 54 L76 82 M76 54 L44 82" stroke="#ca8a04" stroke-width="2" opacity="0.6"/>
+    </svg>`,
+
+  nina: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fdf2f8"/>
+      <circle cx="60" cy="56" r="28" fill="#7c2d12"/>
+      <circle cx="60" cy="62" r="22" fill="#fed7aa" stroke="#c2410c" stroke-width="2.5"/>
+      <circle cx="52" cy="60" r="3.5" fill="#1e293b"/>
+      <circle cx="68" cy="60" r="3.5" fill="#1e293b"/>
+      <path d="M53 70 Q60 76 67 70" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="30" cy="58" r="8" fill="#7c2d12"/>
+      <circle cx="90" cy="58" r="8" fill="#7c2d12"/>
+    </svg>`,
+
+  casa: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fff1f2"/>
+      <rect x="34" y="56" width="52" height="36" rx="4" fill="#fde68a" stroke="#b45309" stroke-width="3"/>
+      <polygon points="26,58 60,28 94,58" fill="#f43f5e" stroke="#9f1239" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="53" y="68" width="14" height="24" rx="2" fill="#92400e"/>
+    </svg>`,
+
+  camion: `
+    <svg viewBox="0 0 120 120" class="w-full h-full">
+      <circle cx="60" cy="60" r="54" fill="#fef3c7"/>
+      <rect x="20" y="42" width="48" height="34" rx="6" fill="#ef4444" stroke="#991b1b" stroke-width="3"/>
+      <path d="M68 50 H88 L98 64 V76 H68 Z" fill="#f97316" stroke="#9a3412" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="74" y="54" width="12" height="10" rx="2" fill="#e0f2fe"/>
+      <circle cx="38" cy="80" r="9" fill="#1e293b"/>
+      <circle cx="82" cy="80" r="9" fill="#1e293b"/>
+    </svg>`
+};
+
+
+/* =========================================
+   2. RONDAS INTERACTIVAS
+========================================= */
+
+const ROUNDS = [
+  {
+    id: 1,
+    family: "Terminación -ATO",
+    question: "¿Qué imagen rima con GATO?",
+    targetWord: "GATO",
+    targetArt: "gato",
+    teacherScript: "Escuchemos con atención: GA-TO. ¿Cuál de estas imágenes termina con el mismo sonido al final: pato, perro o mesa?",
+    guidedPrompt: "¿Por qué crees que «pato» rima con «gato»? ¿En qué se parecen al final cuando las dices en voz alta?",
+    rhymeEnding: "-ato",
+    options: [
+      {
+        id: "pato",
+        label: "PATO",
+        art: "pato",
+        isCorrect: true,
+        feedbackSuccess: "¡Muy bien! «Ga-to» y «pa-to» terminan igual con el sonido «-ato».",
+        feedbackRetry: "Casi. «Ga-to» termina con «-ato». Prueba escuchando el final de cada palabra."
+      },
+      {
+        id: "perro",
+        label: "PERRO",
+        art: "perro",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "¡Buen intento! «Perro» termina en «-erro» y no rima con «gato». Escuchemos otra opción."
+      },
+      {
+        id: "mesa",
+        label: "MESA",
+        art: "mesa",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Mesa» termina en «-esa». Busquemos una palabra que suene igual al final que «gato»."
+      }
+    ]
+  },
+  {
+    id: 2,
+    family: "Terminación -OL",
+    question: "¿Cuál de estas imágenes tiene un nombre que rima con SOL?",
+    targetWord: "SOL",
+    targetArt: "sol",
+    teacherScript: "Digamos juntos: SOL. ¿Qué palabra rima con sol: caracol, flor o tren?",
+    guidedPrompt: "¿Por qué «caracol» rima con «sol»? ¿Cómo suena el final de «sol» y «cara-col»?",
+    rhymeEnding: "-ol",
+    options: [
+      {
+        id: "flor",
+        label: "FLOR",
+        art: "flor",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Flor» termina en «-or». Escuchemos cuál termina con el sonido «-ol» como «sol»."
+      },
+      {
+        id: "caracol",
+        label: "CARACOL",
+        art: "caracol",
+        isCorrect: true,
+        feedbackSuccess: "¡Excelente! «Sol» y «cara-col» terminan con el sonido «-ol».",
+        feedbackRetry: "¡Casi! Recuerda que «cara-col» termina igual que «sol»."
+      },
+      {
+        id: "tren",
+        label: "TREN",
+        art: "tren",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Tren» termina en «-en». Intentemos de nuevo buscando el sonido «-ol»."
+      }
+    ]
+  },
+  {
+    id: 3,
+    family: "Terminación -UNA",
+    question: "¿Qué imagen rima con LUNA?",
+    targetWord: "LUNA",
+    targetArt: "luna",
+    teacherScript: "Observa la LUNA. ¿Cuál de estas imágenes tiene un nombre que rima con luna: cuna, árbol o queso?",
+    guidedPrompt: "¿Por qué «cuna» rima con «luna»? ¿Qué sílaba final comparten ambas palabras?",
+    rhymeEnding: "-una",
+    options: [
+      {
+        id: "arbol",
+        label: "ÁRBOL",
+        art: "arbol",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Árbol» no suena igual al final que «luna». ¡Sigamos intentando!"
+      },
+      {
+        id: "cuna",
+        label: "CUNA",
+        art: "cuna",
+        isCorrect: true,
+        feedbackSuccess: "¡Genial! «Lu-na» y «cu-na» terminan igual con «-una».",
+        feedbackRetry: "Escucha el final de «cu-na» y «lu-na». ¡Suenan parecido!"
+      },
+      {
+        id: "queso",
+        label: "QUESO",
+        art: "queso",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Queso» termina en «-eso». Busquemos la que termina en «-una»."
+      }
+    ]
+  },
+  {
+    id: 4,
+    family: "Terminación -ÓN",
+    question: "¿Qué imagen rima con RATÓN?",
+    targetWord: "RATÓN",
+    targetArt: "raton",
+    teacherScript: "Escuchemos: RA-TÓN. ¿Cuál de estas imágenes rima con ratón: pelota, camión o reloj?",
+    guidedPrompt: "¿En qué se parece el sonido final de «ratón» y «camión» cuando los pronuncias despacio?",
+    rhymeEnding: "-ón",
+    options: [
+      {
+        id: "pelota",
+        label: "PELOTA",
+        art: "pelota",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Pelota» termina en «-ota». Escuchemos cuál suena como «ratón»."
+      },
+      {
+        id: "camion",
+        label: "CAMIÓN",
+        art: "camion",
+        isCorrect: true,
+        feedbackSuccess: "¡Excelente! «Ra-tón» y «ca-mión» terminan con el sonido «-ón».",
+        feedbackRetry: "¡Casi! «Ca-mión» rima con «ra-tón» porque terminan en «-ón»."
+      },
+      {
+        id: "reloj",
+        label: "RELOJ",
+        art: "reloj",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Reloj» termina en «-oj». ¡Buen intento! Probemos otra vez."
+      }
+    ]
+  },
+  {
+    id: 5,
+    family: "Terminación -IÑA",
+    question: "¿Cuál de estas imágenes rima con PIÑA?",
+    targetWord: "PIÑA",
+    targetArt: "pina",
+    teacherScript: "Digamos despacio: PI-ÑA. ¿Qué imagen rima con piña: niña, luna o sol?",
+    guidedPrompt: "¿Por qué «niña» rima con «piña»? ¿Cómo terminan las dos palabras?",
+    rhymeEnding: "-iña",
+    options: [
+      {
+        id: "nina",
+        label: "NIÑA",
+        art: "nina",
+        isCorrect: true,
+        feedbackSuccess: "¡Qué buen oído! «Pi-ña» y «ni-ña» terminan con «-iña».",
+        feedbackRetry: "¡Casi! «Ni-ña» rima con «pi-ña» porque terminan igual."
+      },
+      {
+        id: "luna",
+        label: "LUNA",
+        art: "luna",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Luna» termina en «-una». Busquemos la que termina en «-iña»."
+      },
+      {
+        id: "sol",
+        label: "SOL",
+        art: "sol",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Sol» termina en «-ol». ¡Inténtalo de nuevo!"
+      }
+    ]
+  },
+  {
+    id: 6,
+    family: "Terminación -ASA",
+    question: "¿Qué imagen rima con CASA?",
+    targetWord: "CASA",
+    targetArt: "casa",
+    teacherScript: "Escuchemos: CA-SA. ¿Qué palabra rima con casa: mesa, pato o tren?",
+    guidedPrompt: "¿Por qué «mesa» rima con «casa»? ¿Qué letras o sonidos comparten al final?",
+    rhymeEnding: "-asa / -esa",
+    options: [
+      {
+        id: "mesa",
+        label: "MESA",
+        art: "mesa",
+        isCorrect: true,
+        feedbackSuccess: "¡Muy bien! «Ca-sa» y «me-sa» riman al sonar parecido al final.",
+        feedbackRetry: "Escucha «ca-sa» y «me-sa». ¡Tienen un final muy parecido!"
+      },
+      {
+        id: "pato",
+        label: "PATO",
+        art: "pato",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Pato» termina en «-ato». Busquemos una palabra que rime con «casa»."
+      },
+      {
+        id: "tren",
+        label: "TREN",
+        art: "tren",
+        isCorrect: false,
+        feedbackSuccess: "",
+        feedbackRetry: "«Tren» termina en «-en». ¡Sigamos probando!"
+      }
+    ]
+  }
+];
+
+
+/* =========================================
+   3. ESTADO DEL JUEGO
+========================================= */
+
+let currentIndex = 0;
+let showLabels = false;
+
+let selectedByRound = {};
+let solvedRounds = {};
+let explanationsByRound = {};
+
+let lastFeedbackSpeech = "";
+let currentFeedbackAudio = null;
+let gameFinished = false;
+
+
+/* =========================================
+   4. FUNCIONES AUXILIARES
+========================================= */
+
+function getElement(id) {
+  return document.getElementById(id);
+}
+
+function getSolvedCount() {
+  return Object.values(solvedRounds).filter(Boolean).length;
+}
+
+function stopCurrentAudio() {
+  if (currentFeedbackAudio) {
+    currentFeedbackAudio.pause();
+    currentFeedbackAudio.currentTime = 0;
+    currentFeedbackAudio = null;
+  }
+}
+
+function stopSpeech() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+
+/* =========================================
+   5. SONIDOS DE RESPUESTA
+========================================= */
+
+function playGentleTone(type) {
+  try {
+    stopCurrentAudio();
+
+    const soundFile = type === "success"
+      ? "sonidos/correcto.mp3"
+      : "sonidos/incorrecto.mp3";
+
+    currentFeedbackAudio = new Audio(soundFile);
+    currentFeedbackAudio.volume = 0.7;
+
+    const playPromise = currentFeedbackAudio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.warn("No se pudo reproducir el sonido:", error);
+      });
+    }
+
+  } catch (error) {
+    console.warn("Error al reproducir el sonido:", error);
+  }
+}
+
+
+/* =========================================
+   6. LECTURA EN VOZ ALTA
+========================================= */
+
+function speakSpanish(text) {
+  const statusBadge = getElement("audioStatusBadge");
+
+  if (!("speechSynthesis" in window)) {
+    if (statusBadge) {
+      statusBadge.textContent =
+        "Audio no disponible · Usa el guion docente";
+    }
+    return;
+  }
+
+  try {
+    stopSpeech();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "es-ES";
+    utterance.rate = 0.92;
+    utterance.pitch = 1.05;
+
+    const voices = window.speechSynthesis.getVoices();
+
+    const spanishVoice = voices.find((voice) =>
+      voice.lang && voice.lang.toLowerCase().startsWith("es")
+    );
+
+    if (spanishVoice) {
+      utterance.voice = spanishVoice;
+    }
+
+    utterance.onstart = () => {
+      if (!statusBadge) return;
+
+      statusBadge.textContent = "🔊 Leyendo en voz alta...";
+      statusBadge.className =
+        "text-xs font-bold px-3 py-1 rounded-full bg-sky-600 text-white self-start sm:self-center shrink-0";
+    };
+
+    utterance.onend = () => {
+      if (!statusBadge) return;
+
+      statusBadge.textContent = "Listo para leer en voz alta";
+      statusBadge.className =
+        "text-xs font-semibold px-3 py-1 rounded-full bg-white text-sky-800 border border-sky-200 self-start sm:self-center shrink-0";
+    };
+
+    utterance.onerror = () => {
+      if (!statusBadge) return;
+
+      statusBadge.textContent =
+        "Lee el guion docente en voz alta";
+
+      statusBadge.className =
+        "text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 self-start sm:self-center shrink-0";
+    };
+
+    window.speechSynthesis.speak(utterance);
+
+  } catch (error) {
+    console.warn("Error en la lectura de voz:", error);
+
+    if (statusBadge) {
+      statusBadge.textContent =
+        "Lee el guion docente en voz alta";
+    }
+  }
+}
+
+function speakCurrentQuestion() {
+  const round = ROUNDS[currentIndex];
+
+  if (!round) return;
+
+  speakSpanish(
+    `${round.question} ${round.teacherScript}`
+  );
+}
+
+function speakCurrentFeedback() {
+  if (lastFeedbackSpeech) {
+    speakSpanish(lastFeedbackSpeech);
+  }
+}
+
+function speakGuidedPrompt() {
+  const round = ROUNDS[currentIndex];
+
+  if (!round) return;
+
+  speakSpanish(round.guidedPrompt);
+}
+
+
+/* =========================================
+   7. MOSTRAR U OCULTAR PALABRAS
+========================================= */
+
+function toggleLabels() {
+  if (gameFinished) return;
+
+  showLabels = !showLabels;
+
+  const btn = getElement("toggleLabelsBtn");
+  const text = getElement("labelsText");
+  const icon = getElement("labelsIcon");
+
+  if (btn) {
+    btn.setAttribute("aria-pressed", String(showLabels));
+
+    if (showLabels) {
+      btn.classList.remove(
+        "bg-amber-50",
+        "border-amber-300"
+      );
+
+      btn.classList.add(
+        "bg-amber-200",
+        "border-amber-500"
+      );
+
+    } else {
+      btn.classList.remove(
+        "bg-amber-200",
+        "border-amber-500"
+      );
+
+      btn.classList.add(
+        "bg-amber-50",
+        "border-amber-300"
+      );
+    }
+  }
+
+  if (icon) {
+    icon.textContent = showLabels ? "🏷️" : "👁️";
+  }
+
+  if (text) {
+    text.textContent = showLabels
+      ? "Mostrar palabras: Visibles"
+      : "Mostrar palabras: Ocultas";
+  }
+
+  renderSlide();
+}
+
+
+/* =========================================
+   8. ÍNDICE DE RONDAS
+========================================= */
+
+function renderRoundsIndex() {
+  const nav = getElement("roundsIndex");
+
+  if (!nav) return;
+
+  nav.innerHTML = "";
+
+  ROUNDS.forEach((round, idx) => {
+    const isCurrent = idx === currentIndex;
+    const isSolved = Boolean(solvedRounds[idx]);
+
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+    btn.setAttribute(
+      "aria-label",
+      `Ir a la ronda ${round.id}${isSolved ? ", completada" : ""}`
+    );
+
+    btn.setAttribute(
+      "aria-current",
+      isCurrent ? "step" : "false"
+    );
+
+    btn.onclick = () => {
+      if (!gameFinished) {
+        goToSlide(idx);
+      }
+    };
+
+    let baseClasses =
+      "px-3.5 py-2 rounded-xl font-bold text-xs sm:text-sm transition flex items-center gap-1.5 shrink-0 cursor-pointer ";
+
+    if (isCurrent) {
+      baseClasses +=
+        "bg-sky-600 text-white shadow-sm";
+
+    } else if (isSolved) {
+      baseClasses +=
+        "bg-emerald-100 text-emerald-900 border border-emerald-300 hover:bg-emerald-200";
+
+    } else {
+      baseClasses +=
+        "bg-slate-100 text-slate-700 hover:bg-slate-200";
+    }
+
+    btn.className = baseClasses;
+
+    btn.innerHTML = `
+      <span>Ronda ${round.id}</span>
+      <span>${isSolved ? "⭐" : `(${round.targetWord})`}</span>
+    `;
+
+    nav.appendChild(btn);
+  });
+}
+
+
+/* =========================================
+   9. SELECCIONAR RESPUESTA
+========================================= */
+
+function selectOption(optionId, cardElement) {
+  if (gameFinished) return;
+
+  const round = ROUNDS[currentIndex];
+
+  if (!round) return;
+
+  // Si ya se resolvió correctamente, no permitir cambiarla.
+  if (solvedRounds[currentIndex]) {
+    return;
+  }
+
+  const chosen = round.options.find(
+    (opt) => opt.id === optionId
+  );
+
+  if (!chosen) return;
+
+  selectedByRound[currentIndex] = optionId;
+
+  if (chosen.isCorrect) {
+    solvedRounds[currentIndex] = true;
+
+    playGentleTone("success");
+
+    lastFeedbackSpeech = chosen.feedbackSuccess;
+
+    showFeedback(
+      true,
+      "¡Muy bien! ¡Encontraste la rima!",
+      chosen.feedbackSuccess
+    );
+
+    if (cardElement) {
+      cardElement.classList.remove("animate-retry");
+      cardElement.classList.add("animate-celebrate");
+    }
+
+  } else {
+    playGentleTone("retry");
+
+    lastFeedbackSpeech = chosen.feedbackRetry;
+
+    showFeedback(
+      false,
+      "¡Sigamos intentando!",
+      chosen.feedbackRetry
+    );
+
+    if (cardElement) {
+      cardElement.classList.remove("animate-celebrate");
+      cardElement.classList.add("animate-retry");
+    }
+  }
+
+  renderRoundsIndex();
+  updateProgressCounter();
+  renderOptionsGrid();
+  updateNavigationButtons();
+}
+
+
+/* =========================================
+   10. RETROALIMENTACIÓN
+========================================= */
+
+function showFeedback(isSuccess, title, detail) {
+  const box = getElement("feedbackBox");
+  const emoji = getElement("feedbackEmoji");
+  const titleEl = getElement("feedbackTitle");
+  const detailEl = getElement("feedbackDetail");
+
+  if (!box || !emoji || !titleEl || !detailEl) {
+    return;
+  }
+
+  box.classList.remove("hidden");
+
+  if (isSuccess) {
+    box.className =
+      "rounded-2xl p-4 sm:p-5 border-2 bg-emerald-50 border-emerald-400 text-emerald-950 transition-all";
+
+    emoji.textContent = "🌟";
+
+  } else {
+    box.className =
+      "rounded-2xl p-4 sm:p-5 border-2 bg-amber-50 border-amber-400 text-amber-950 transition-all";
+
+    emoji.textContent = "👂";
+  }
+
+  titleEl.textContent = title;
+  detailEl.textContent = detail;
+}
+
+
+/* =========================================
+   11. MOSTRAR OPCIONES
+========================================= */
+
+function renderOptionsGrid() {
+  const round = ROUNDS[currentIndex];
+  const grid = getElement("optionsGrid");
+
+  if (!round || !grid) return;
+
+  const selectedId = selectedByRound[currentIndex];
+  const isRoundSolved = Boolean(solvedRounds[currentIndex]);
+
+  grid.innerHTML = "";
+
+  round.options.forEach((opt) => {
+    const isSelected = selectedId === opt.id;
+
+    const card = document.createElement("button");
+
+    card.type = "button";
+    card.disabled = isRoundSolved;
+
+    card.setAttribute(
+      "aria-label",
+      showLabels
+        ? `Opción ${opt.label}`
+        : "Escuchar y seleccionar esta imagen"
+    );
+
+    card.setAttribute(
+      "aria-pressed",
+      String(isSelected)
+    );
+
+    card.onclick = () => {
+      selectOption(opt.id, card);
+    };
+
+    let cardClasses =
+      "group rounded-3xl border-3 p-4 sm:p-5 flex flex-col items-center justify-center gap-3 transition transform hover:-translate-y-0.5 active:scale-98 cursor-pointer shadow-sm ";
+
+    if (isSelected && opt.isCorrect) {
+      cardClasses +=
+        "bg-emerald-50 border-emerald-500 ring-4 ring-emerald-200";
+
+    } else if (isSelected && !opt.isCorrect) {
+      cardClasses +=
+        "bg-rose-50 border-rose-400 ring-4 ring-rose-100";
+
+    } else {
+      cardClasses +=
+        "bg-slate-50/80 hover:bg-sky-50 border-slate-200 hover:border-sky-400";
+    }
+
+    if (isRoundSolved) {
+      cardClasses += " cursor-not-allowed";
+    }
+
+    card.className = cardClasses;
+
+    const labelHtml = showLabels
+      ? `
+        <span class="font-display text-xl sm:text-2xl font-bold text-slate-900 bg-white px-4 py-1 rounded-xl border border-slate-200 shadow-2xs">
+          ${opt.label}
+        </span>
+      `
+      : `
+        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 bg-white/80 px-3 py-1 rounded-full">
+          Escucha y toca
+        </span>
+      `;
+
+    const statusBadgeHtml = isSelected
+      ? opt.isCorrect
+        ? `
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white">
+            ✓ ¡Rima correcta!
+          </span>
+        `
+        : `
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-rose-600 text-white">
+            ↻ Probar otra
+          </span>
+        `
+      : "";
+
+    card.innerHTML = `
+      <div class="w-28 h-28 sm:w-36 sm:h-36 flex items-center justify-center">
+        ${SVG_ART[opt.art] || ""}
+      </div>
+
+      ${labelHtml}
+      ${statusBadgeHtml}
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================
+   12. ACTUALIZAR DIAPOSITIVA
+========================================= */
+
+function renderSlide() {
+  if (gameFinished) return;
+
+  const round = ROUNDS[currentIndex];
+
+  if (!round) return;
+
+  const roundBadge = getElement("roundBadge");
+  const rhymeFamilyBadge = getElement("rhymeFamilyBadge");
+  const questionText = getElement("questionText");
+  const targetSvgContainer = getElement("targetSvgContainer");
+  const targetWordDisplay = getElement("targetWordDisplay");
+  const teacherScriptText = getElement("teacherScriptText");
+  const guidedQuestionText = getElement("guidedQuestionText");
+  const inputEl = getElement("childExplanationInput");
+  const feedbackBox = getElement("feedbackBox");
+
+  if (roundBadge) {
+    roundBadge.textContent =
+      `Ronda ${round.id} de ${ROUNDS.length}`;
+  }
+
+  if (rhymeFamilyBadge) {
+    rhymeFamilyBadge.textContent =
+      `Sonido final: ${round.rhymeEnding}`;
+  }
+
+  if (questionText) {
+    questionText.textContent = round.question;
+  }
+
+  if (targetSvgContainer) {
+    targetSvgContainer.innerHTML =
+      SVG_ART[round.targetArt] || "";
+  }
+
+  if (targetWordDisplay) {
+    targetWordDisplay.textContent =
+      showLabels ? round.targetWord : "•••";
+  }
+
+  if (teacherScriptText) {
+    teacherScriptText.textContent =
+      `“${round.teacherScript}”`;
+  }
+
+  if (guidedQuestionText) {
+    guidedQuestionText.textContent =
+      round.guidedPrompt;
+  }
+
+  // Restaurar explicación escrita.
+  if (inputEl) {
+    inputEl.value =
+      explanationsByRound[currentIndex] || "";
+  }
+
+  // Restaurar retroalimentación anterior.
+  const selectedId = selectedByRound[currentIndex];
+
+  if (selectedId) {
+    const chosen = round.options.find(
+      (option) => option.id === selectedId
+    );
+
+    if (chosen) {
+      if (chosen.isCorrect) {
+        lastFeedbackSpeech = chosen.feedbackSuccess;
+
+        showFeedback(
+          true,
+          "¡Muy bien! ¡Encontraste la rima!",
+          chosen.feedbackSuccess
+        );
+
+      } else {
+        lastFeedbackSpeech = chosen.feedbackRetry;
+
+        showFeedback(
+          false,
+          "¡Sigamos intentando!",
+          chosen.feedbackRetry
+        );
+      }
+    }
+
+  } else {
+    if (feedbackBox) {
+      feedbackBox.classList.add("hidden");
+    }
+
+    lastFeedbackSpeech = "";
+  }
+
+  renderOptionsGrid();
+  renderRoundsIndex();
+  updateProgressCounter();
+  updateNavigationButtons();
+}
+
+
+/* =========================================
+   13. BOTONES ANTERIOR Y SIGUIENTE
+========================================= */
+
+function updateNavigationButtons() {
+  const prevBtn = getElement("prevSlideBtn");
+  const nextBtn = getElement("nextSlideBtn");
+
+  const isSolved = Boolean(solvedRounds[currentIndex]);
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === ROUNDS.length - 1;
+
+  if (prevBtn) {
+    prevBtn.disabled = isFirst || gameFinished;
+  }
+
+  if (nextBtn) {
+    nextBtn.disabled = !isSolved || gameFinished;
+
+    if (isLast) {
+      nextBtn.textContent = "Finalizar 🏆";
+    } else {
+      nextBtn.textContent = "Siguiente ➜";
+    }
+
+    nextBtn.title = isSolved
+      ? (isLast
+          ? "Finalizar el juego"
+          : "Continuar a la siguiente ronda")
+      : "Primero encuentra la respuesta correcta";
+
+    nextBtn.setAttribute(
+      "aria-label",
+      isLast ? "Finalizar el juego" : "Siguiente ronda"
+    );
+  }
+}
+
+
+/* =========================================
+   14. NAVEGACIÓN MANUAL
+========================================= */
+
+function goToSlide(newIndex) {
+  if (gameFinished) return;
+
+  // CORRECCIÓN PRINCIPAL:
+  // Si el HTML intenta ir a una posición posterior
+  // a la última ronda, se muestra la pantalla final.
+  if (
+    newIndex >= ROUNDS.length &&
+    currentIndex === ROUNDS.length - 1 &&
+    solvedRounds[currentIndex]
+  ) {
+    showCompletionScreen();
+    return;
+  }
+
+  // Evitar salir de los límites del juego.
+  if (newIndex < 0 || newIndex >= ROUNDS.length) {
+    return;
+  }
+
+  // No permitir avanzar si la ronda actual no está resuelta.
+  if (
+    newIndex > currentIndex &&
+    !solvedRounds[currentIndex]
+  ) {
+    return;
+  }
+
+  stopSpeech();
+
+  currentIndex = newIndex;
+
+  renderSlide();
+
+  const slideCard = getElement("slideCard");
+
+  if (slideCard) {
+    slideCard.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+  }
+}
+
+function changeSlide(direction) {
+  if (gameFinished) return;
+
+  const nextIndex = currentIndex + direction;
+
+  if (direction === 1) {
+    // No avanzar si todavía no se resolvió la ronda.
+    if (!solvedRounds[currentIndex]) {
+      return;
+    }
+
+    // Si terminó la última ronda, mostrar pantalla final.
+    if (currentIndex === ROUNDS.length - 1) {
+      showCompletionScreen();
+      return;
+    }
+  }
+
+  goToSlide(nextIndex);
+}
+
+
+
+/* =========================================
+   15. PANTALLA FINAL
+========================================= */
+
+function showCompletionScreen() {
+  // Evitar mostrar dos veces la pantalla final.
+  if (document.getElementById("completionScreen")) return;
+
+  // Detener audios y lectura en voz alta.
+  stopCurrentAudio();
+  stopSpeech();
+
+  const completion = document.createElement("div");
+
+  completion.id = "completionScreen";
+
+  completion.className =
+    "fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4";
+
+  completion.innerHTML = `
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-300
+                max-w-lg w-full p-7 sm:p-10 text-center animate-pop-success">
+
+      <div class="text-7xl mb-4">🏆</div>
+
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-emerald-700 mb-3">
+        ¡Felicidades!
+      </h2>
+
+      <p class="text-lg font-bold text-slate-800 mb-3">
+        ¡Has completado todas las rimas!
+      </p>
+
+      <p class="text-slate-600 mb-6">
+        Has superado todos los desafíos de palabras y sonidos.
+        ¡Eres un gran explorador de rimas!
+      </p>
+
+      <div class="bg-emerald-50 rounded-2xl p-4 mb-6 border border-emerald-200">
+        <p class="text-2xl">⭐ ⭐ ⭐</p>
+
+        <p class="font-bold text-emerald-800 mt-2">
+          ${ROUNDS.length} de ${ROUNDS.length} desafíos completados
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onclick="restartGame()"
+        class="w-full px-6 py-4 rounded-2xl bg-emerald-500
+               hover:bg-emerald-600 text-white font-bold text-lg
+               shadow-lg transition cursor-pointer">
+
+        🔄 Volver a jugar
+
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(completion);
+}
+
+
+/* =========================================
+   16. EXPLICACIÓN DEL NIÑO
+========================================= */
+
+function saveChildExplanation(val) {
+  if (gameFinished) return;
+
+  explanationsByRound[currentIndex] = val;
+}
+
+function clearChildExplanation() {
+  if (gameFinished) return;
+
+  explanationsByRound[currentIndex] = "";
+
+  const input = getElement("childExplanationInput");
+
+  if (input) {
+    input.value = "";
+  }
+}
+
+
+/* =========================================
+   17. CONTADOR DE PROGRESO
+========================================= */
+
+function updateProgressCounter() {
+  const count = getSolvedCount();
+
+  const solvedCount = getElement("solvedCount");
+  const totalRoundsCount = getElement("totalRoundsCount");
+
+  if (solvedCount) {
+    solvedCount.textContent = String(count);
+  }
+
+  if (totalRoundsCount) {
+    totalRoundsCount.textContent = String(ROUNDS.length);
+  }
+
+  // Actualizar barra de progreso si existe.
+  const progressBar = getElement("progressBar");
+
+  if (progressBar) {
+    const percentage = (count / ROUNDS.length) * 100;
+
+    progressBar.style.width = `${percentage}%`;
+    progressBar.setAttribute(
+      "aria-valuenow",
+      String(count)
+    );
+  }
+}
+
+
+
+/* =========================================
+   18. REINICIAR JUEGO
+========================================= */
+
+function restartGame() {
+
+  // Detener sonidos y voces.
+  stopCurrentAudio();
+  stopSpeech();
+
+  // Reiniciar la ronda actual.
+  currentIndex = 0;
+
+  // Reiniciar las respuestas seleccionadas.
+  selectedByRound = {};
+
+  // Reiniciar las rondas completadas.
+  solvedRounds = {};
+
+  // Borrar las explicaciones de cada ronda.
+  explanationsByRound = {};
+
+  // Ocultar las palabras nuevamente.
+  showLabels = false;
+
+  // Limpiar la última retroalimentación.
+  lastFeedbackSpeech = "";
+
+  // Reiniciar el estado del juego.
+  gameFinished = false;
+
+  // Eliminar la pantalla final.
+  const completion = document.getElementById("completionScreen");
+
+  if (completion) {
+    completion.remove();
+  }
+
+  // Restaurar el botón de mostrar palabras.
+  const toggleBtn = getElement("toggleLabelsBtn");
+  const labelsText = getElement("labelsText");
+  const labelsIcon = getElement("labelsIcon");
+
+  if (toggleBtn) {
+    toggleBtn.setAttribute("aria-pressed", "false");
+
+    toggleBtn.classList.remove(
+      "bg-amber-200",
+      "border-amber-500"
+    );
+
+    toggleBtn.classList.add(
+      "bg-amber-50",
+      "border-amber-300"
+    );
+  }
+
+  if (labelsText) {
+    labelsText.textContent = "Mostrar palabras: Ocultas";
+  }
+
+  if (labelsIcon) {
+    labelsIcon.textContent = "👁️";
+  }
+
+  // Volver a dibujar la primera ronda.
+  renderSlide();
+
+  // Actualizar el progreso.
+  updateProgressCounter();
+
+  // Actualizar los botones de navegación.
+  updateNavigationButtons();
+
+  // Regresar al inicio.
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+  console.log("🔄 Juego de rimas reiniciado correctamente.");
+}
+
+
+
+/* =========================================
+   19. MODAL DE GUÍA DOCENTE Y RÚBRICA
+========================================= */
+
+function openGuideModal() {
+  const modal = getElement("guideModal");
+
+  if (!modal) return;
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+function closeGuideModal() {
+  const modal = getElement("guideModal");
+
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+}
+
+
+/* =========================================
+   20. ATAJOS DE TECLADO
+========================================= */
+
+document.addEventListener("keydown", (e) => {
+  // No ejecutar atajos mientras se escribe.
+  const activeElement = document.activeElement;
+
+  const isTyping =
+    activeElement &&
+    (
+      activeElement.tagName === "INPUT" ||
+      activeElement.tagName === "TEXTAREA" ||
+      activeElement.isContentEditable
+    );
+
+  if (e.key === "Escape") {
+    closeGuideModal();
+    return;
+  }
+
+  if (isTyping || gameFinished) {
+    return;
+  }
+
+  if (e.key === "ArrowRight") {
+    e.preventDefault();
+    changeSlide(1);
+
+  } else if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    changeSlide(-1);
+  }
+});
+
+
+/* =========================================
+   21. INICIALIZACIÓN DEL JUEGO
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Cerrar modal al hacer clic fuera.
+  const guideModal = getElement("guideModal");
+
+  if (guideModal) {
+    guideModal.addEventListener("click", (e) => {
+      if (e.target === guideModal) {
+        closeGuideModal();
+      }
+    });
+  }
+
+  // Preparar voces disponibles.
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.getVoices();
+  }
+
+  // Inicializar estado visual.
+  updateProgressCounter();
+  renderSlide();
+
+  console.log(
+    "🎨 Juego de rimas iniciado correctamente."
+  );
+
+  console.log(
+    `📚 Total de rondas: ${ROUNDS.length}`
+  );
+});
+
+  </script>
+</body>
+</html>
