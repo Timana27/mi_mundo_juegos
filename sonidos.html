@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memoria Auditiva de Sonidos — Recurso N.° 8</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fefce8 100%);
+      min-height: 100vh;
+      color: #0f172a;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', 'Inter', sans-serif;
+    }
+
+    /* Ondas de sonido animadas al reproducir */
+    @keyframes soundPulse {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.15); opacity: 0.9; }
+    }
+    .anim-pulse-ring {
+      animation: soundPulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes waveBar {
+      0%, 100% { height: 8px; }
+      50% { height: 36px; }
+    }
+    .wave-bar {
+      width: 6px;
+      background-color: #0284c7;
+      border-radius: 9999px;
+      animation: waveBar 0.8s ease-in-out infinite;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.6s; }
+
+    /* Efectos de retroalimentación */
+    @keyframes popSuccess {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .animate-pop-success {
+      animation: popSuccess 0.4s ease-out;
+    }
+/* BOTÓN DE INICIO TRANSPARENTE */
+.home-button {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+  color: #7c3aed;
+  font-size: 26px;
+
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 15px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  z-index: 9999;
+
+  transition: all 0.2s ease;
+}
+
+.home-button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+
+.home-button:hover {
+  background: #ede9fe;
+  transform: scale(1.08);
+}
+
+.home-button:active {
+  transform: scale(0.95);
+}
+  </style>
+</head>
+<!-- BOTÓN PARA REGRESAR AL MENÚ PRINCIPAL -->
+<a href="index.html" class="home-button" title="Volver al menú principal">
+  🏠
+</a>
+<body class="antialiased selection:bg-emerald-200 selection:text-emerald-950">
+  <div id="app" class="min-h-screen flex flex-col justify-between max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 gap-4">
+
+    <!-- Encabezado Superior -->
+    <header class="bg-white/95 backdrop-blur rounded-3xl shadow-md border-2 border-emerald-100 p-4 sm:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 flex items-center justify-center shadow-inner shrink-0" aria-hidden="true">
+          <svg viewBox="0 0 64 64" class="w-10 h-10 text-white">
+            <path fill="currentColor" d="M38 12 L24 24 H12 V40 H24 L38 52 Z"/>
+            <path fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" d="M46 22 A16 16 0 0 1 46 42 M54 16 A26 26 0 0 1 54 48"/>
+          </svg>
+        </div>
+        <div>
+          <span class="inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-800 mb-1">
+            Recurso Digital N.° 8 · Conciencia Fonológica
+          </span>
+          <h1 class="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+            Memoria Auditiva de Sonidos
+          </h1>
+        </div>
+      </div>
+
+      <!-- Controles de Modo y Guía -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <!-- Selector de Modo de Uso -->
+        <div class="bg-slate-100 p-1 rounded-2xl flex items-center border border-slate-200">
+          <button
+            id="modeTeacherBtn"
+            type="button"
+            onclick="setMode('teacher')"
+            class="px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer bg-white text-emerald-800 shadow-xs"
+          >
+            📢 Modo Parlante / Aula
+          </button>
+          <button
+            id="modeStudentBtn"
+            type="button"
+            onclick="setMode('student')"
+            class="px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer text-slate-600 hover:text-slate-900"
+          >
+            🕹️ Modo Interactivo
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onclick="openGuideModal()"
+          class="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm shadow-sm transition flex items-center gap-2 cursor-pointer"
+        >
+          <span>📋</span>
+          <span>Guía y Rúbrica</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de Categorías -->
+    <nav aria-label="Categorías de sonidos" class="bg-white/90 rounded-2xl shadow-sm border border-slate-200 p-2">
+      <div class="flex items-center justify-around gap-2" id="categoryNav">
+        <!-- Generado dinámicamente -->
+      </div>
+    </nav>
+
+    <!-- Área Principal de Juego -->
+    <main class="flex-1 flex flex-col gap-4">
+      <section class="bg-white rounded-3xl shadow-lg border-2 border-emerald-200 p-4 sm:p-7 flex flex-col gap-6">
+
+        <!-- Barra del Desafío y Reproductor Central -->
+        <div class="flex flex-col items-center justify-center text-center gap-4 border-b-2 border-dashed border-slate-200 pb-6">
+          
+          <div class="flex items-center gap-2">
+            <span id="challengeBadge" class="px-3.5 py-1 rounded-full bg-sky-100 text-sky-900 font-bold text-sm">
+              Desafío 1 de 3
+            </span>
+            <span id="categoryBadge" class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-semibold text-xs">
+              Categoría: Animales
+            </span>
+          </div>
+
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            Escucha con atención el sonido y descubre qué imagen le corresponde:
+          </h2>
+
+          <!-- Botón Gigante de Reproducción con Ondas Animadas -->
+          <div class="relative flex items-center justify-center my-2">
+            <div id="pulseRing" class="absolute w-40 h-40 rounded-full bg-sky-300 opacity-0 pointer-events-none"></div>
+            
+            <button
+              id="playSoundBtn"
+              type="button"
+              onclick="playCurrentSound()"
+              class="relative z-10 px-8 py-5 rounded-3xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 active:scale-95 text-white shadow-xl transition-all duration-200 flex items-center gap-4 cursor-pointer group"
+            >
+              <span class="text-4xl group-hover:scale-110 transition-transform">🔊</span>
+              <div class="text-left">
+                <span class="block font-display text-xl sm:text-2xl font-bold tracking-wide">¡ESCUCHAR SONIDO!</span>
+                <span class="block text-xs text-sky-100 font-medium">Haz clic o toca para reproducir en el parlante</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Indicador de estado y animador de onda -->
+          <div id="soundWaveContainer" class="h-10 flex items-center justify-center gap-1.5 opacity-30 transition-opacity">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <span id="audioStatusText" class="ml-3 text-sm font-semibold text-sky-800">Listo para reproducir</span>
+          </div>
+        </div>
+
+        <!-- Preguntas Guías para la Docente (Modo Parlante/Aula) -->
+        <div id="teacherPromptBox" class="bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-amber-950 text-base sm:text-lg flex items-center gap-2">
+              <span>💬</span> Preguntas de Mediación Pedagógica (Docente)
+            </span>
+            <span class="text-xs bg-amber-200 text-amber-900 font-bold px-2.5 py-0.5 rounded-full">Proyección en Parlante</span>
+          </div>
+          <p class="text-sm sm:text-base text-amber-900 leading-relaxed">
+            Pregunte al aula antes de revelar la respuesta:
+            <em id="guidedQuestionText" class="font-semibold text-amber-950 block mt-1">
+              "¿Qué escucharon? ¿Será un animal, un instrumento o un objeto? ¿Quién puede imitar cómo suena?"
+            </em>
+          </p>
+        </div>
+
+        <!-- Rejilla de Opciones de Imágenes (4 Opciones) -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-sm sm:text-base font-semibold text-slate-700">
+              Selecciona la imagen que genera este sonido:
+            </p>
+            <button
+              id="revealTeacherAnswerBtn"
+              type="button"
+              onclick="revealAnswerTeacher()"
+              class="hidden text-xs font-bold px-3 py-1.5 rounded-xl bg-purple-100 text-purple-900 hover:bg-purple-200 border border-purple-300 transition cursor-pointer"
+            >
+              👁️ Revelar respuesta en grupo
+            </button>
+          </div>
+
+          <div id="optionsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+            <!-- Renderizado dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Caja de Retroalimentación -->
+        <div id="feedbackBox" class="hidden rounded-2xl p-4 border-2 transition-all" role="status">
+          <div class="flex items-center gap-3">
+            <span id="feedbackEmoji" class="text-3xl">🎉</span>
+            <div>
+              <h3 id="feedbackTitle" class="font-display text-lg font-bold"></h3>
+              <p id="feedbackDetail" class="text-sm"></p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Navegación de Desafíos -->
+    <footer class="bg-white/95 rounded-2xl shadow-md border-2 border-emerald-100 p-3 sm:px-6 flex items-center justify-between gap-3">
+      <button
+        id="prevChallengeBtn"
+        type="button"
+        onclick="changeChallenge(-1)"
+        class="px-5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 font-bold text-sm sm:text-base transition cursor-pointer"
+      >
+        ⬅️ Anterior
+      </button>
+
+      <span class="text-sm font-semibold text-slate-700">
+        ⭐ Resueltos: <strong id="solvedCount">0</strong> / <span id="totalCount">9</span>
+      </span>
+
+      <button
+        id="nextChallengeBtn"
+        type="button"
+        onclick="changeChallenge(1)"
+        class="px-5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-bold text-sm sm:text-base shadow-sm transition cursor-pointer"
+      >
+        Siguiente ➡️
+      </button>
+    </footer>
+  </div>
+
+  <!-- Modal Guía Docente y Rúbrica -->
+  <div
+    id="guideModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-3 sm:p-6 overflow-y-auto"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-indigo-200 p-5 sm:p-8 space-y-6 my-auto">
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 mb-1">
+            Criterio 8 · Desarrollo de la Conciencia Fonológica
+          </span>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-900">
+            Guía Pedagógica y Criterios de Evaluación
+          </h2>
+        </div>
+        <button
+          type="button"
+          onclick="closeGuideModal()"
+          class="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-rose-100 text-slate-700 font-bold text-lg flex items-center justify-center cursor-pointer"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Objetivo -->
+      <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 space-y-2">
+        <h3 class="font-display text-lg font-bold text-emerald-950">🎯 Objetivo Fonológico y Auditivo</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Ejercitar la <strong>discriminación auditiva y la memoria de sonidos</strong> (animales, instrumentos y objetos cotidianos) como capacidad base para la posterior asociación fonema-grafema y conciencia de los sonidos del lenguaje oral.
+        </p>
+      </div>
+
+      <!-- Metodología en Aula (Parlante) -->
+      <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 space-y-2">
+        <h3 class="font-display text-lg font-bold text-sky-950">🔊 Aplicación con Parlante (Sin manipulación directa obligatoria)</h3>
+        <p class="text-sm text-slate-700 leading-relaxed">
+          Tal como especifica el numeral 8 de los Recursos Digitales, la docente puede reproducir el sonido a través de parlantes para todo el grupo. Los niños escuchan, levantan la mano o señalan en la lámina la imagen correspondiente y explican oralmente sus características antes de validar la respuesta.
+        </p>
+      </div>
+
+      <!-- Criterios de la Rúbrica -->
+      <div class="border border-slate-200 rounded-2xl p-4 space-y-3">
+        <h3 class="font-display text-lg font-bold text-slate-900">✅ Alineación con los Criterios de Evaluación (5 Puntos)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <p class="font-bold text-indigo-900">Claridad del catálogo</p>
+            <p class="text-slate-600">Recurso organizado en 3 categorías claras (Animales, Instrumentos, Sonidos Cotidianos) con tarjetas de alta visibilidad.</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <p class="font-bold text-indigo-900">Pertinencia del contenido</p>
+            <p class="text-slate-600">Enfocado exactamente en la memoria auditiva y la relación sonido-imagen requerida en la rúbrica N.° 8.</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <p class="font-bold text-indigo-900">Rigor metodológico</p>
+            <p class="text-slate-600">Incluye guion de preguntas mediadoras para la docente y dos modos de interacción (Parlante interactivo / Evaluación del niño).</p>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <p class="font-bold text-indigo-900">Presentación y formato</p>
+            <p class="text-slate-600">Síntesis de audio pura sin fallos de carga por URLs externas, visuales coloridas e interfaz accesible en proyector o tablet.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button
+          type="button"
+          onclick="closeGuideModal()"
+          class="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition cursor-pointer"
+        >
+          Volver a la presentación
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+
+/* =========================================================
+   SVG ART HELPER
+========================================================= */
+
+const SVGS = {
+  perro: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fef3c7"/><circle cx="50" cy="52" r="26" fill="#d97706"/><ellipse cx="26" cy="52" rx="9" ry="18" fill="#78350f"/><ellipse cx="74" cy="52" rx="9" ry="18" fill="#78350f"/><ellipse cx="50" cy="60" rx="12" ry="8" fill="#fff"/><circle cx="50" cy="56" r="4" fill="#1e293b"/><circle cx="42" cy="46" r="3.5" fill="#1e293b"/><circle cx="58" cy="46" r="3.5" fill="#1e293b"/></svg>`,
+
+  gato: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#ffedd5"/><polygon points="22,42 28,18 44,35" fill="#fb923c"/><polygon points="78,42 72,18 56,35" fill="#fb923c"/><ellipse cx="50" cy="54" rx="26" ry="22" fill="#fdba74"/><circle cx="40" cy="50" r="4" fill="#1e293b"/><circle cx="60" cy="50" r="4" fill="#1e293b"/><polygon points="50,56 46,60 54,60" fill="#f43f5e"/></svg>`,
+
+  gallo: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fee2e2"/><path d="M48 20 Q54 10 60 20 Q64 12 70 24" fill="#ef4444"/><circle cx="50" cy="54" r="24" fill="#facc15"/><polygon points="32,54 20,58 32,64" fill="#f97316"/><circle cx="44" cy="48" r="3.5" fill="#1e293b"/></svg>`,
+
+  vaca: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#f1f5f9"/><circle cx="50" cy="52" r="26" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/><ellipse cx="50" cy="62" rx="16" ry="10" fill="#fbcfe8"/><circle cx="36" cy="48" r="4" fill="#1e293b"/><circle cx="64" cy="48" r="4" fill="#1e293b"/><circle cx="42" cy="62" r="2" fill="#831843"/><circle cx="58" cy="62" r="2" fill="#831843"/></svg>`,
+
+  campana: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fefce8"/><path d="M50 20 C32 20 30 50 24 64 H76 C70 50 68 20 50 20 Z" fill="#facc15" stroke="#ca8a04" stroke-width="3"/><circle cx="50" cy="72" r="6" fill="#854d0e"/></svg>`,
+
+  tambor: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#f0fdf4"/><rect x="22" y="36" width="56" height="32" rx="4" fill="#ef4444" stroke="#b91c1c" stroke-width="3"/><ellipse cx="50" cy="36" rx="28" ry="8" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/><line x1="30" y1="20" x2="42" y2="34" stroke="#78350f" stroke-width="3"/><line x1="70" y1="20" x2="58" y2="34" stroke="#78350f" stroke-width="3"/></svg>`,
+
+  flauta: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#ecfeff"/><rect x="18" y="44" width="64" height="12" rx="6" fill="#38bdf8" stroke="#0284c7" stroke-width="3"/><circle cx="32" cy="50" r="2" fill="#fff"/><circle cx="44" cy="50" r="2" fill="#fff"/><circle cx="56" cy="50" r="2" fill="#fff"/><circle cx="68" cy="50" r="2" fill="#fff"/></svg>`,
+
+  guitarra: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fff7ed"/><path d="M30 65 A16 16 0 0 0 54 75 A14 14 0 0 0 65 52 L75 25 L65 22 L52 54 A14 14 0 0 0 30 65 Z" fill="#fb923c" stroke="#c2410c" stroke-width="3"/><circle cx="44" cy="62" r="5" fill="#78350f"/></svg>`,
+
+  lluvia: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#f0f9ff"/><path d="M26 48 A14 14 0 0 1 50 36 A18 18 0 0 1 76 48 Z" fill="#94a3b8"/><line x1="34" y1="58" x2="30" y2="72" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/><line x1="50" y1="58" x2="46" y2="72" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/><line x1="66" y1="58" x2="62" y2="72" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/></svg>`,
+
+  puerta: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fdf2f8"/><rect x="30" y="20" width="40" height="60" rx="4" fill="#b45309" stroke="#78350f" stroke-width="3"/><circle cx="62" cy="52" r="3.5" fill="#facc15"/></svg>`,
+
+  auto: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#fef2f2"/><path d="M22 54 L32 38 H68 L78 54 H84 V68 H16 V54 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="3"/><circle cx="32" cy="68" r="7" fill="#1e293b"/><circle cx="68" cy="68" r="7" fill="#1e293b"/></svg>`,
+
+  telefono: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="45" fill="#f0fdf4"/><rect x="34" y="22" width="32" height="56" rx="8" fill="#22c55e" stroke="#15803d" stroke-width="3"/><rect x="38" y="30" width="24" height="32" rx="2" fill="#bbf7d0"/><circle cx="50" cy="70" r="3" fill="#fff"/></svg>`
+};
+
+
+/* =========================================================
+   CATEGORÍAS Y DESAFÍOS
+========================================================= */
+
+const DATA = {
+  animales: {
+    title: "🐶 Animales",
+    challenges: [
+      {
+        id: "perro",
+        name: "Perro (Ladrido)",
+        target: "perro",
+        soundKey: "dog",
+        prompt: "¿Qué animal hace «¡Guau, guau!»? ¿Es grande o pequeño?",
+        options: [
+          { id: "perro", label: "Perro", art: "perro", correct: true },
+          { id: "gato", label: "Gato", art: "gato", correct: false },
+          { id: "gallo", label: "Gallo", art: "gallo", correct: false },
+          { id: "vaca", label: "Vaca", art: "vaca", correct: false }
+        ]
+      },
+      {
+        id: "gato",
+        name: "Gato (Maullido)",
+        target: "gato",
+        soundKey: "cat",
+        prompt: "¿Qué animal suave hace «¡Miau, miau!»?",
+        options: [
+          { id: "vaca", label: "Vaca", art: "vaca", correct: false },
+          { id: "gato", label: "Gato", art: "gato", correct: true },
+          { id: "perro", label: "Perro", art: "perro", correct: false },
+          { id: "gallo", label: "Gallo", art: "gallo", correct: false }
+        ]
+      },
+      {
+        id: "gallo",
+        name: "Gallo (Canto)",
+        target: "gallo",
+        soundKey: "rooster",
+        prompt: "¿Qué ave nos despierta en la mañana con «¡Kikirikí!»?",
+        options: [
+          { id: "gallo", label: "Gallo", art: "gallo", correct: true },
+          { id: "perro", label: "Perro", art: "perro", correct: false },
+          { id: "gato", label: "Gato", art: "gato", correct: false },
+          { id: "vaca", label: "Vaca", art: "vaca", correct: false }
+        ]
+      }
+    ]
+  },
+
+  instrumentos: {
+    title: "🔔 Instrumentos",
+    challenges: [
+      {
+        id: "campana",
+        name: "Campana (Campanada)",
+        target: "campana",
+        soundKey: "bell",
+        prompt: "¿Qué instrumento metálico suena «¡Tan, tan!» o «¡Ding, dong!»?",
+        options: [
+          { id: "tambor", label: "Tambor", art: "tambor", correct: false },
+          { id: "campana", label: "Campana", art: "campana", correct: true },
+          { id: "flauta", label: "Flauta", art: "flauta", correct: false },
+          { id: "guitarra", label: "Guitarra", art: "guitarra", correct: false }
+        ]
+      },
+      {
+        id: "tambor",
+        name: "Tambor (Percusión)",
+        target: "tambor",
+        soundKey: "drum",
+        prompt: "¿Qué instrumento de percusión marcamos con baquetas: «¡Pum, pum!»?",
+        options: [
+          { id: "flauta", label: "Flauta", art: "flauta", correct: false },
+          { id: "guitarra", label: "Guitarra", art: "guitarra", correct: false },
+          { id: "tambor", label: "Tambor", art: "tambor", correct: true },
+          { id: "campana", label: "Campana", art: "campana", correct: false }
+        ]
+      },
+      {
+        id: "flauta",
+        name: "Flauta (Melodía de viento)",
+        target: "flauta",
+        soundKey: "flute",
+        prompt: "¿Qué instrumento de viento suave sopla notas agudas?",
+        options: [
+          { id: "campana", label: "Campana", art: "campana", correct: false },
+          { id: "flauta", label: "Flauta", art: "flauta", correct: true },
+          { id: "tambor", label: "Tambor", art: "tambor", correct: false },
+          { id: "guitarra", label: "Guitarra", art: "guitarra", correct: false }
+        ]
+      }
+    ]
+  },
+
+  cotidianos: {
+    title: "🚗 Sonidos Cotidianos",
+    challenges: [
+      {
+        id: "lluvia",
+        name: "Lluvia (Gotas al caer)",
+        target: "lluvia",
+        soundKey: "rain",
+        prompt: "¿Qué sonido de la naturaleza escuchas cuando caen gotas del cielo?",
+        options: [
+          { id: "puerta", label: "Puerta", art: "puerta", correct: false },
+          { id: "auto", label: "Auto", art: "auto", correct: false },
+          { id: "lluvia", label: "Lluvia", art: "lluvia", correct: true },
+          { id: "telefono", label: "Teléfono", art: "telefono", correct: false }
+        ]
+      },
+      {
+        id: "puerta",
+        name: "Puerta (Toc-Toc)",
+        target: "puerta",
+        soundKey: "door",
+        prompt: "¿Qué objeto suena «¡Toc, toc!» cuando alguien llega a casa?",
+        options: [
+          { id: "puerta", label: "Puerta", art: "puerta", correct: true },
+          { id: "lluvia", label: "Lluvia", art: "lluvia", correct: false },
+          { id: "auto", label: "Auto", art: "auto", correct: false },
+          { id: "telefono", label: "Teléfono", art: "telefono", correct: false }
+        ]
+      },
+      {
+        id: "auto",
+        name: "Auto (Bocina / Claxon)",
+        target: "auto",
+        soundKey: "car",
+        prompt: "¿Qué medio de transporte suena «¡Bip, bip!» en la calle?",
+        options: [
+          { id: "telefono", label: "Teléfono", art: "telefono", correct: false },
+          { id: "auto", label: "Auto", art: "auto", correct: true },
+          { id: "puerta", label: "Puerta", art: "puerta", correct: false },
+          { id: "lluvia", label: "Lluvia", art: "lluvia", correct: false }
+        ]
+      }
+    ]
+  }
+};
+
+
+/* =========================================================
+   ESTADO GLOBAL
+========================================================= */
+
+let currentCategoryKey = "animales";
+let currentChallengeIndex = 0;
+let mode = "teacher";
+let solvedChallenges = {};
+let currentAudio = null;
+
+
+/* =========================================================
+   ARCHIVOS DE AUDIO
+========================================================= */
+
+const AUDIO_FILES = {
+  dog: "sonidos/perro.mp3",
+  cat: "sonidos/gato.mp3",
+  rooster: "sonidos/gallo.mp3",
+
+  bell: "sonidos/campana.mp3",
+  drum: "sonidos/tambor.mp3",
+  flute: "sonidos/flauta.mp3",
+
+  rain: "sonidos/lluvia.mp3",
+  door: "sonidos/puerta.mp3",
+  car: "sonidos/auto.mp3",
+
+  success: "sonidos/correcto.mp3",
+  retry: "sonidos/incorrecto.mp3"
+};
+
+
+/* =========================================================
+   REPRODUCTOR DE AUDIO
+========================================================= */
+
+function playAudio(file) {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio.onended = null;
+  }
+
+  currentAudio = new Audio(file);
+  currentAudio.volume = 1;
+
+  const audioToPlay = currentAudio;
+
+  audioToPlay.onerror = () => {
+    if (currentAudio !== audioToPlay) return;
+
+    console.error("No se pudo cargar el audio:", file);
+    stopWaveUI();
+
+    document.getElementById("audioStatusText").textContent =
+      "No se pudo cargar el sonido";
+  };
+
+  audioToPlay.play()
+    .then(() => {
+      if (currentAudio === audioToPlay) {
+        animateWaveUI(audioToPlay);
+      }
+    })
+    .catch((error) => {
+      console.error("Error al reproducir audio:", error);
+
+      if (currentAudio === audioToPlay) {
+        stopWaveUI();
+
+        document.getElementById("audioStatusText").textContent =
+          "Presiona nuevamente para escuchar";
+      }
+    });
+}
+
+
+function synthSound(key) {
+  const file = AUDIO_FILES[key];
+
+  if (!file) {
+    console.error("No existe un archivo para:", key);
+    return;
+  }
+
+  playAudio(file);
+}
+
+
+function playSuccessTone() {
+  playAudio(AUDIO_FILES.success);
+}
+
+
+function playRetryTone() {
+  playAudio(AUDIO_FILES.retry);
+}
+
+
+/* =========================================================
+   ANIMACIÓN DE ONDAS
+========================================================= */
+
+function animateWaveUI(audio) {
+  const container = document.getElementById("soundWaveContainer");
+  const pulseRing = document.getElementById("pulseRing");
+  const statusText = document.getElementById("audioStatusText");
+
+  container.classList.remove("opacity-30");
+  container.classList.add("opacity-100");
+
+  pulseRing.classList.remove("opacity-0");
+  pulseRing.classList.add("anim-pulse-ring");
+
+  statusText.textContent = "🔊 Reproduciendo sonido...";
+
+  audio.onended = () => {
+    if (currentAudio !== audio) return;
+    stopWaveUI();
+  };
+}
+
+
+function stopWaveUI() {
+  const container = document.getElementById("soundWaveContainer");
+  const pulseRing = document.getElementById("pulseRing");
+  const statusText = document.getElementById("audioStatusText");
+
+  container.classList.remove("opacity-100");
+  container.classList.add("opacity-30");
+
+  pulseRing.classList.remove("anim-pulse-ring");
+  pulseRing.classList.add("opacity-0");
+
+  statusText.textContent = "Listo para reproducir de nuevo";
+}
+
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio.onended = null;
+    currentAudio = null;
+  }
+
+  stopWaveUI();
+}
+
+
+/* =========================================================
+   LÓGICA DE INTERFAZ Y MODOS
+========================================================= */
+
+function setMode(newMode) {
+  mode = newMode;
+
+  const tBtn = document.getElementById("modeTeacherBtn");
+  const sBtn = document.getElementById("modeStudentBtn");
+  const promptBox = document.getElementById("teacherPromptBox");
+  const revealBtn = document.getElementById("revealTeacherAnswerBtn");
+
+  if (mode === "teacher") {
+    tBtn.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer bg-white text-emerald-800 shadow-xs";
+
+    sBtn.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer text-slate-600 hover:text-slate-900";
+
+    promptBox.classList.remove("hidden");
+    revealBtn.classList.remove("hidden");
+
+  } else {
+    sBtn.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer bg-white text-emerald-800 shadow-xs";
+
+    tBtn.className = "px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer text-slate-600 hover:text-slate-900";
+
+    promptBox.classList.add("hidden");
+    revealBtn.classList.add("hidden");
+  }
+
+  renderCurrentChallenge();
+}
+
+
+/* =========================================================
+   CATEGORÍAS
+========================================================= */
+
+function switchCategory(catKey) {
+  if (!DATA[catKey]) return;
+
+  stopCurrentAudio();
+
+  currentCategoryKey = catKey;
+  currentChallengeIndex = 0;
+
+  renderCategoryNav();
+  renderCurrentChallenge();
+}
+
+
+function renderCategoryNav() {
+  const nav = document.getElementById("categoryNav");
+
+  nav.innerHTML = "";
+
+  Object.keys(DATA).forEach((key) => {
+    const cat = DATA[key];
+    const isActive = key === currentCategoryKey;
+
+    const isCompleted = cat.challenges.every(
+      (ch) => solvedChallenges[ch.soundKey] === true
+    );
+
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+    btn.onclick = () => switchCategory(key);
+
+    let colorClasses;
+
+    if (isActive && isCompleted) {
+      colorClasses = "bg-emerald-700 text-white shadow-sm ring-2 ring-emerald-300";
+    } else if (isActive) {
+      colorClasses = "bg-emerald-600 text-white shadow-sm";
+    } else if (isCompleted) {
+      colorClasses = "bg-green-100 text-green-800 border border-green-300 hover:bg-green-200";
+    } else {
+      colorClasses = "bg-slate-100 text-slate-700 hover:bg-slate-200";
+    }
+
+    btn.className = `px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer flex items-center gap-2 ${colorClasses}`;
+
+    btn.innerHTML = `
+      <span>${cat.title}</span>
+      ${isCompleted ? `<span class="font-black">✓</span>` : ""}
+    `;
+
+    nav.appendChild(btn);
+  });
+}
+
+
+function getCurrentChallenge() {
+  return DATA[currentCategoryKey].challenges[currentChallengeIndex];
+}
+
+
+function playCurrentSound() {
+  const ch = getCurrentChallenge();
+  synthSound(ch.soundKey);
+}
+
+
+/* =========================================================
+   RESPUESTAS Y RETROALIMENTACIÓN
+========================================================= */
+
+function selectOption(optionObj, cardEl) {
+  const ch = getCurrentChallenge();
+
+  // Evitar responder dos veces un desafío completado
+  if (solvedChallenges[ch.soundKey]) return;
+
+  const fbBox = document.getElementById("feedbackBox");
+  const fbEmoji = document.getElementById("feedbackEmoji");
+  const fbTitle = document.getElementById("feedbackTitle");
+  const fbDetail = document.getElementById("feedbackDetail");
+
+  fbBox.classList.remove("hidden");
+
+  if (optionObj.correct) {
+
+    solvedChallenges[ch.soundKey] = true;
+
+    playSuccessTone();
+
+    fbBox.className = "rounded-2xl p-4 border-2 bg-emerald-50 border-emerald-400 text-emerald-950 animate-pop-success";
+
+    fbEmoji.textContent = "🎉";
+    fbTitle.textContent = "¡Excelente!";
+    fbDetail.textContent =
+      `¡Correcto! El sonido corresponde a ${optionObj.label}.`;
+
+    updateSolvedCounter();
+    renderOptionsGrid();
+    renderCategoryNav();
+    updateNavigationButtons();
+
+  } else {
+
+    playRetryTone();
+
+    fbBox.className = "rounded-2xl p-4 border-2 bg-amber-50 border-amber-400 text-amber-950";
+
+    fbEmoji.textContent = "👂";
+    fbTitle.textContent = "¡Escuchemos otra vez!";
+    fbDetail.textContent =
+      `Esa imagen es ${optionObj.label}. Vuelve a reproducir el sonido y compara.`;
+
+    renderOptionsGrid();
+  }
+}
+
+
+/* =========================================================
+   REVELAR RESPUESTA PARA LA DOCENTE
+========================================================= */
+
+function revealAnswerTeacher() {
+  const ch = getCurrentChallenge();
+
+  if (solvedChallenges[ch.soundKey]) return;
+
+  const correctOpt = ch.options.find((o) => o.correct);
+
+  if (!correctOpt) return;
+
+  solvedChallenges[ch.soundKey] = true;
+
+  playSuccessTone();
+
+  const fbBox = document.getElementById("feedbackBox");
+
+  fbBox.classList.remove("hidden");
+
+  fbBox.className = "rounded-2xl p-4 border-2 bg-purple-50 border-purple-400 text-purple-950 animate-pop-success";
+
+  document.getElementById("feedbackEmoji").textContent = "🌟";
+
+  document.getElementById("feedbackTitle").textContent =
+    "Respuesta validada en aula";
+
+  document.getElementById("feedbackDetail").textContent =
+    `El sonido corresponde a: ${correctOpt.label}. ¡Excelente participación!`;
+
+  updateSolvedCounter();
+  renderOptionsGrid();
+  renderCategoryNav();
+  updateNavigationButtons();
+}
+
+
+/* =========================================================
+   DIBUJAR OPCIONES
+========================================================= */
+
+function renderOptionsGrid() {
+  const ch = getCurrentChallenge();
+
+  const grid = document.getElementById("optionsGrid");
+
+  grid.innerHTML = "";
+
+  const alreadySolved = Boolean(solvedChallenges[ch.soundKey]);
+
+  ch.options.forEach((opt) => {
+    const card = document.createElement("button");
+
+    card.type = "button";
+    card.disabled = alreadySolved;
+
+    card.onclick = () => selectOption(opt, card);
+
+    const isSolvedThis = alreadySolved && opt.correct;
+
+    card.className = `group rounded-3xl border-3 p-4 flex flex-col items-center justify-center gap-3 transition transform hover:-translate-y-0.5 active:scale-98 shadow-sm ${
+      isSolvedThis
+        ? "bg-emerald-50 border-emerald-500 ring-4 ring-emerald-200"
+        : "bg-slate-50 hover:bg-emerald-50/60 border-slate-200 hover:border-emerald-300"
+    } ${alreadySolved ? "cursor-default" : "cursor-pointer"}`;
+
+    card.innerHTML = `
+      <div class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+        ${SVGS[opt.art] || ""}
+      </div>
+
+      <span class="font-display text-lg sm:text-xl font-bold text-slate-800">
+        ${opt.label}
+      </span>
+
+      ${
+        isSolvedThis
+          ? `<span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-600 text-white">✓ ¡Identificado!</span>`
+          : `<span class="text-xs text-slate-400 font-medium">Tocar imagen</span>`
+      }
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   ACTUALIZAR DESAFÍO EN PANTALLA
+========================================================= */
+
+function renderCurrentChallenge() {
+  const cat = DATA[currentCategoryKey];
+
+  const ch = getCurrentChallenge();
+
+  document.getElementById("categoryBadge").textContent =
+    `Categoría: ${cat.title}`;
+
+  document.getElementById("challengeBadge").textContent =
+    `Desafío ${currentChallengeIndex + 1} de ${cat.challenges.length}`;
+
+  document.getElementById("guidedQuestionText").textContent =
+    `“${ch.prompt}”`;
+
+  document.getElementById("feedbackBox").classList.add("hidden");
+
+  updateNavigationButtons();
+  renderOptionsGrid();
+}
+
+
+/* =========================================================
+   NAVEGACIÓN MANUAL ENTRE DESAFÍOS Y CATEGORÍAS
+========================================================= */
+
+function changeChallenge(dir) {
+  const categoryKeys = Object.keys(DATA);
+  const currentCategoryPosition = categoryKeys.indexOf(currentCategoryKey);
+
+  const cat = DATA[currentCategoryKey];
+  const currentChallenge = getCurrentChallenge();
+
+  // No avanzar si el desafío actual no está resuelto
+  if (dir > 0 && !solvedChallenges[currentChallenge.soundKey]) {
+    return;
+  }
+
+  stopCurrentAudio();
+
+  const newIdx = currentChallengeIndex + dir;
+
+  // Avanzar o retroceder dentro de la misma categoría
+  if (newIdx >= 0 && newIdx < cat.challenges.length) {
+    currentChallengeIndex = newIdx;
+    renderCurrentChallenge();
+    return;
+  }
+
+  // Al terminar una categoría, pasar manualmente a la siguiente
+  if (dir > 0 && currentChallengeIndex === cat.challenges.length - 1) {
+
+    // Verificar que todos los desafíos de la categoría estén resueltos
+    const categoryCompleted = cat.challenges.every(
+      (ch) => solvedChallenges[ch.soundKey] === true
+    );
+
+    if (!categoryCompleted) return;
+
+    // Si existen más categorías
+    if (currentCategoryPosition < categoryKeys.length - 1) {
+      currentCategoryKey = categoryKeys[currentCategoryPosition + 1];
+      currentChallengeIndex = 0;
+
+      renderCategoryNav();
+      renderCurrentChallenge();
+      return;
+    }
+
+    // Si ya terminó la última categoría
+    showCompletionScreen();
+    return;
+  }
+
+  // Retroceder desde el primer desafío a la categoría anterior
+  if (dir < 0 && currentChallengeIndex === 0 && currentCategoryPosition > 0) {
+    currentCategoryKey = categoryKeys[currentCategoryPosition - 1];
+
+    const previousCategory = DATA[currentCategoryKey];
+
+    currentChallengeIndex = previousCategory.challenges.length - 1;
+
+    renderCategoryNav();
+    renderCurrentChallenge();
+  }
+}
+
+
+/* =========================================================
+   ACTUALIZAR BOTONES DE NAVEGACIÓN
+========================================================= */
+
+function updateNavigationButtons() {
+  const categoryKeys = Object.keys(DATA);
+
+  const cat = DATA[currentCategoryKey];
+  const ch = getCurrentChallenge();
+
+  const isSolved = Boolean(solvedChallenges[ch.soundKey]);
+
+  const currentCategoryPosition = categoryKeys.indexOf(currentCategoryKey);
+
+  const isLastChallenge =
+    currentChallengeIndex === cat.challenges.length - 1;
+
+  const isLastCategory =
+    currentCategoryPosition === categoryKeys.length - 1;
+
+  const prevBtn = document.getElementById("prevChallengeBtn");
+  const nextBtn = document.getElementById("nextChallengeBtn");
+
+  // Botón anterior
+  prevBtn.disabled =
+    currentChallengeIndex === 0 && currentCategoryPosition === 0;
+
+  // Texto del botón siguiente
+  if (isLastChallenge && isLastCategory) {
+    nextBtn.textContent = "Finalizar 🏆";
+  } else if (isLastChallenge) {
+    nextBtn.textContent = "Siguiente categoría ➜";
+  } else {
+    nextBtn.textContent = "Siguiente ➜";
+  }
+
+  // Habilitar siguiente únicamente cuando se resuelva el desafío
+  nextBtn.disabled = !isSolved;
+}
+
+
+/* =========================================================
+   CONTADOR DE DESAFÍOS RESUELTOS
+========================================================= */
+
+function updateSolvedCounter() {
+  const count = Object.values(solvedChallenges)
+    .filter(value => value === true).length;
+
+  document.getElementById("solvedCount").textContent =
+    String(count);
+}
+
+
+/* =========================================================
+   PANTALLA FINAL DE FELICITACIÓN
+========================================================= */
+
+function showCompletionScreen() {
+  stopCurrentAudio();
+
+  // Evitar crear más de una pantalla final
+  if (document.getElementById("completionScreen")) return;
+
+  const completion = document.createElement("div");
+
+  completion.id = "completionScreen";
+
+  completion.className =
+    "fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4";
+
+  completion.innerHTML = `
+    <div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-300
+                max-w-lg w-full p-7 sm:p-10 text-center animate-pop-success">
+
+      <div class="text-7xl mb-4">🏆</div>
+
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-emerald-700 mb-3">
+        ¡Felicidades!
+      </h2>
+
+      <p class="text-lg font-bold text-slate-800 mb-3">
+        ¡Has completado todos los sonidos!
+      </p>
+
+      <p class="text-slate-600 mb-6">
+        Has superado los desafíos de animales, instrumentos y sonidos cotidianos.
+        ¡Eres un gran explorador de sonidos!
+      </p>
+
+      <div class="bg-emerald-50 rounded-2xl p-4 mb-6 border border-emerald-200">
+        <p class="text-2xl">⭐ ⭐ ⭐</p>
+
+        <p class="font-bold text-emerald-800 mt-2">
+          9 de 9 desafíos completados
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onclick="restartGame()"
+        class="w-full px-6 py-4 rounded-2xl bg-emerald-500
+               hover:bg-emerald-600 text-white font-bold text-lg
+               shadow-lg transition cursor-pointer"
+      >
+        🔄 Volver a jugar
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(completion);
+}
+
+
+/* =========================================================
+   VOLVER A JUGAR
+========================================================= */
+
+function restartGame() {
+  stopCurrentAudio();
+
+  // Reiniciar progreso
+  solvedChallenges = {};
+
+  // Volver a la primera categoría
+  currentCategoryKey = "animales";
+  currentChallengeIndex = 0;
+
+  // Eliminar pantalla final
+  const completion = document.getElementById("completionScreen");
+
+  if (completion) {
+    completion.remove();
+  }
+
+  // Actualizar interfaz
+  renderCategoryNav();
+  renderCurrentChallenge();
+  updateSolvedCounter();
+  updateNavigationButtons();
+}
+
+
+/* =========================================================
+   MODAL DE GUÍA DOCENTE Y RÚBRICA
+========================================================= */
+
+function openGuideModal() {
+  const m = document.getElementById("guideModal");
+
+  m.classList.remove("hidden");
+  m.classList.add("flex");
+}
+
+
+function closeGuideModal() {
+  const m = document.getElementById("guideModal");
+
+  m.classList.add("hidden");
+  m.classList.remove("flex");
+}
+
+
+/* Cerrar modal con Escape */
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeGuideModal();
+  }
+});
+
+
+/* =========================================================
+   INICIALIZACIÓN
+========================================================= */
+
+window.addEventListener("DOMContentLoaded", () => {
+  renderCategoryNav();
+
+  renderCurrentChallenge();
+
+  let total = 0;
+
+  Object.keys(DATA).forEach((k) => {
+    total += DATA[k].challenges.length;
+  });
+
+  document.getElementById("totalCount").textContent =
+    String(total);
+
+  updateSolvedCounter();
+});
+
+  </script>
+</body>
+</html>
